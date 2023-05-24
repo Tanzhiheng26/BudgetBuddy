@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useEffect, useState } from 'react'
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
