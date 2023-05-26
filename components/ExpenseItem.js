@@ -6,7 +6,7 @@ import { Icon } from '@rneui/themed';
 import { auth } from '../firebase'
 
 
-const ExpenseItem = ({ id, name, cost }) => {
+const ExpenseItem = ({ id, name, cost, date }) => {
     const { dispatch } = useContext(AppContext);
     const handleDeleteExpense = () => {
         dispatch({
@@ -17,7 +17,8 @@ const ExpenseItem = ({ id, name, cost }) => {
     }
     return (
         <View style={styles.row}>
-            <Text style={styles.text}>{name}: </Text>
+            <Text style={styles.text}>{date} </Text>
+            <Text style={styles.text}>{name} </Text>
             <Text style={styles.text}>${cost}</Text>
             <Icon name='delete' onPress={handleDeleteExpense} />
         </View>

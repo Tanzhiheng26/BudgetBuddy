@@ -8,7 +8,7 @@ const ExpenseList = () => {
   return (
     <View>
         {expenses.map((expense) => 
-            <ExpenseItem key={expense.id} id={expense.id} name={expense.name} cost={expense.cost}/>
+            <ExpenseItem key={expense.id} id={expense.id} name={expense.name} cost={expense.cost} date={expense.date}/>
         )}
     </View>
   )

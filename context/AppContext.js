@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { createContext, useReducer, useState, useEffect } from 'react'
+import { StyleSheet } from 'react-native'
+import React, { createContext, useReducer, useEffect } from 'react'
 import { getBudget, getExpense } from '../firestore'
 import { auth } from '../firebase'
 
