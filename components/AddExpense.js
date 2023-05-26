@@ -1,15 +1,29 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native'
 import { useContext, useState } from 'react'
 import { AppContext } from '../context/AppContext';
 import { addExpense } from '../firestore';
 import { auth } from '../firebase'
 import uuid from 'react-native-uuid';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddExpense = () => {
     const { dispatch } = useContext(AppContext);
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
+    
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
   
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate;
+      setShow(false);
+      setDate(currentDate);
+    };
+  
+    const showDatepicker = () => {
+      setShow(true);
+    };
+
     const onSubmit = async () => {
         if (name === '' || cost === '') {
           return;
@@ -18,7 +32,8 @@ const AddExpense = () => {
         const expense = {
             id: uuid.v4(),
             name: name,
-            cost: parseInt(cost)
+            cost: parseInt(cost),
+            date: date.toLocaleDateString(),
         }
 
         dispatch({
@@ -26,7 +41,7 @@ const AddExpense = () => {
             payload: expense,
         })
 
-        addExpense(auth.currentUser?.uid, expense.id, expense.name, expense.cost);
+        addExpense(auth.currentUser?.uid, expense.id, expense.name, expense.cost, expense.date);
 
         setName('')
         setCost('')
@@ -47,6 +62,19 @@ const AddExpense = () => {
             placeholder="Cost"
             keyboardType="numeric"
           />
+          <TouchableOpacity
+            style={styles.input}
+            onPress={showDatepicker}>
+            <Text>{'Date: ' + date.toLocaleDateString()}</Text>
+          </TouchableOpacity>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode='date'
+              onChange={onChange}
+            />
+          )}
         </View>
         <TouchableOpacity 
           style={styles.button}
@@ -80,7 +108,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 20
     },
     buttonText: {
         color: 'white',
