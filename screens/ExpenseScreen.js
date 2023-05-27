@@ -11,43 +11,47 @@ const Expenses = () => {
     const navigation = useNavigation();
     const handleSignOut = () => {
         auth
-        .signOut()
-        .then(() => {
-            navigation.replace("Login")
-        })  
-        .catch(error => alert(error.message))
+            .signOut()
+            .then(() => {
+                navigation.replace("Login")
+            })
+            .catch(error => alert(error.message))
     }
     return (
-    <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.scrollView}>
-        <View style={styles.budgetcontainer}>
-            <Text style={styles.title}>My Budget Planner</Text>
-            <View style={styles.components}>
-                <Budget />
-            </View>
-            <View style={styles.components}>
-                <RemainingBudget />
-            </View>
-            <View style={styles.components}>
-                <ExpenseTotal />
-            </View>
-        </View>
+        <SafeAreaView style={styles.container}>
+            <ScrollView style={styles.scrollView}>
+                <View style={styles.budgetcontainer}>
+                    <Text style={styles.title}>My Budget Planner</Text>
+                    <View style={styles.components}>
+                        <Budget />
+                    </View>
+                    <View style={styles.components}>
+                        <RemainingBudget />
+                    </View>
+                    <View style={styles.components}>
+                        <ExpenseTotal />
+                    </View>
+                </View>
 
-        <View style={styles.expensescontainer}>
-            <Text style={styles.title}>Expenses</Text>
-        </View>
-        <ExpenseList />
-            
-        <View style={styles.buttoncontainer}>
-            <TouchableOpacity 
-              style={styles.button}
-              onPress={handleSignOut}>
-                <Text style={styles.buttonText}>Sign out</Text>
-            </TouchableOpacity>
-        </View>
-    </ScrollView>
-    </SafeAreaView>
-  )
+                <View style={styles.expensescontainer}>
+                    <Text style={styles.title}>Expenses</Text>
+                </View>
+
+
+
+
+                <ExpenseList />
+
+                <View style={styles.buttoncontainer}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleSignOut}>
+                        <Text style={styles.buttonText}>Sign out</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
+    )
 }
 
 export default Expenses
@@ -56,8 +60,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
     title: {
-        fontSize: 24, 
+        fontSize: 24,
         textAlign: 'center'
     },
     budgetcontainer: {
@@ -80,9 +88,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 40,
     },
-      buttonText: {
+    buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
-    }, 
+    },
 })
