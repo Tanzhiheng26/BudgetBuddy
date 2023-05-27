@@ -17,12 +17,12 @@ const ExpenseItem = ({ id, name, cost, date, category }) => {
     }
     return (
         <View style={styles.row}>
-            <View style={{ flex: 2, paddingLeft: 20 }}>
-                <Text style={styles.text}>{date} </Text>
+
+            <View style={{ flex: 3, marginLeft: 20 }}>
+                <Text style={styles.text}>{name} </Text>
             </View>
             <View style={{ flex: 3 }}>
-                <Text style={styles.text}>{name} </Text>
-                <Text style={styles.text}>({category}) </Text>
+                <Text style={styles.text}>{category} </Text>
             </View>
             <View style={{ flex: 1 }}>
                 <Text style={styles.text}>${cost}</Text>

@@ -38,7 +38,19 @@ const Expenses = () => {
                 </View>
 
 
+                <View style={styles.row}>
 
+                    <View style={{ flex: 3, marginLeft: 20 }}>
+                        <Text style={styles.text}>Name </Text>
+                    </View>
+                    <View style={{ flex: 3 }}>
+                        <Text style={styles.text}>Category </Text>
+                    </View>
+                    <View style={{ flex: 2 }}>
+                        <Text style={styles.text}>Cost</Text>
+                    </View>
+
+                </View>
 
                 <ExpenseList />
 
@@ -63,6 +75,8 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        flex: 1,
+        marginTop: 20
     },
     title: {
         fontSize: 24,
@@ -87,10 +101,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginTop: 40,
+        marginBottom: 30
     },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
+    },
+    text: {
+        fontSize: 20,
     },
 })
