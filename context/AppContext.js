@@ -5,7 +5,7 @@ import { auth } from '../firebase'
 
 
 const AppReducer = (state, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'ADD_EXPENSE':
             return {
                 ...state,
@@ -13,12 +13,12 @@ const AppReducer = (state, action) => {
             }
         case 'DELETE_EXPENSE':
             return {
-                ...state, 
+                ...state,
                 expenses: state.expenses.filter((expense) => expense.id !== action.payload)
             }
         case 'GET_DATA':
             return {
-                budget: action.budget? action.budget: 0,
+                budget: action.budget ? action.budget : 0,
                 expenses: action.expenses,
             }
         case 'SET_BUDGET':
@@ -38,17 +38,17 @@ const initialState = {
     expenses: [],
 }
 
-export const AppProvider = ({children}) => {
+export const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
     useEffect(() => {
         async function fetchData() {
-          try {
-            const expenses = await getExpense(auth.currentUser.uid);
-            const budget = await getBudget(auth.currentUser.uid);
-            dispatch({ type: 'GET_DATA', expenses: expenses, budget: budget });
-          } catch (error) {
-            console.error('Failed to fetch data:', error);
-          }
+            try {
+                const expenses = await getExpense(auth.currentUser.uid);
+                const budget = await getBudget(auth.currentUser.uid);
+                dispatch({ type: 'GET_DATA', expenses: expenses, budget: budget });
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            }
         };
         fetchData();
     }, [auth.currentUser]);
@@ -60,7 +60,7 @@ export const AppProvider = ({children}) => {
                 expenses: state.expenses,
                 dispatch,
             }}>
-                {children}
+            {children}
         </AppContext.Provider>
     )
 }

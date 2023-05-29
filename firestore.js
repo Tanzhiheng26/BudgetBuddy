@@ -5,9 +5,9 @@ const EXPENSES_COLLECTION = 'expenses'
 const BUDGET_COLLECTION = 'budgets'
 const USERS_COLLECTION = 'users'
 
-export async function addExpense(uid, id, name, cost, date) {
+export async function addExpense(uid, id, name, cost, date, category) {
     const userRef = collection(db, USERS_COLLECTION, uid, EXPENSES_COLLECTION)
-    setDoc(doc(userRef, id), { uid, id, name, cost, date });
+    setDoc(doc(userRef, id), { uid, id, name, cost, date, category });
 }
 
 export async function getExpense(uid) {
@@ -21,6 +21,7 @@ export async function getExpense(uid) {
             name: expense.name,
             cost: expense.cost,
             date: expense.date,
+            category: expense.category
         })
     }
     return allExpenses;
