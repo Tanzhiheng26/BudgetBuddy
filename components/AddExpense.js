@@ -43,7 +43,8 @@ const AddExpense = () => {
       id: uuid.v4(),
       name: name,
       cost: parseInt(cost),
-      date: date.toISOString("en-GB"),
+      // date: date.toISOString(),
+      date: date,
       category: category
     }
 

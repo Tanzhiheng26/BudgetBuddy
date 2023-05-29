@@ -20,7 +20,7 @@ export async function getExpense(uid) {
             id: expense.id,
             name: expense.name,
             cost: expense.cost,
-            date: expense.date,
+            date: expense.date.toDate(),
             category: expense.category
         })
     }

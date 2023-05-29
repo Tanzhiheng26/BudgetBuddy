@@ -8,8 +8,8 @@ import ExpenseItem from './ExpenseItem';
 const ExpenseList = () => {
   const { expenses } = useContext(AppContext);
 
-  expenses.sort((a, b) => new Date(b.date) - new Date(a.date))
-
+  // expenses.sort((a, b) => new Date(b.date) - new Date(a.date))
+  expenses.sort((a, b) => b.date - a.date)
   return (
     <View>
       {expenses.map((expense) =>
@@ -17,7 +17,7 @@ const ExpenseList = () => {
           id={expense.id}
           name={expense.name}
           cost={expense.cost}
-          date={new Date(expense.date).toLocaleDateString()}
+          date={expense.date.toLocaleDateString()}
           category={expense.category} />
       )}
 

@@ -40,10 +40,7 @@ const styles = StyleSheet.create({
     row: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-around',
     },
-
-
     text: {
         fontSize: 18,
     },
