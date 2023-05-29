@@ -7,7 +7,7 @@ const EditBudget = ({ budget, handleSave }) => {
   const [value, setValue] = useState(budget);
   return (
     <View style={styles.container}>
-      <Text>Budget: $</Text>
+      <Text style={styles.text}>Budget: $</Text>
       <TextInput
         style={styles.input}
         onChangeText={setValue}
@@ -32,5 +32,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 5
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: 600
   }
 })

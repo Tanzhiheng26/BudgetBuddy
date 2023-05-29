@@ -7,7 +7,7 @@ const RemainingBudget = () => {
   const totalExpenses = expenses.reduce((total, item) => { return total + item.cost }, 0)
   return (
     <View style={(totalExpenses > budget) ? styles.redcontainer : styles.greencontainer}>
-      <Text>Remaining: ${budget - totalExpenses}</Text>
+      <Text style={styles.text}>Remaining: ${budget - totalExpenses}</Text>
     </View>
   )
 }
@@ -29,4 +29,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center'
   },
+  text: {
+    fontSize: 15,
+    fontWeight: 600
+  }
 })
