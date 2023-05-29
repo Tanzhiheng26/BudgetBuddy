@@ -1,20 +1,21 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@rneui/themed'
 
-const EditBudget = ({budget, handleSave}) => {
+
+const EditBudget = ({ budget, handleSave }) => {
   const [value, setValue] = useState(budget);
   return (
     <View style={styles.container}>
-      <Text>Budget: $</Text>
+      <Text style={styles.text}>Budget: $</Text>
       <TextInput
-            style={styles.input}
-            onChangeText={setValue}
-            value={value.toString()}
-            placeholder="New Budget"
-            keyboardType="numeric"
-        />
-      <Icon name='check' onPress={ () => handleSave(value) } style={styles.icon}/>
+        style={styles.input}
+        onChangeText={setValue}
+        value={value.toString()}
+        placeholder="New Budget"
+        keyboardType="numeric"
+      />
+      <Icon name='check' onPress={() => handleSave(value)} style={styles.icon} />
     </View>
   )
 }
@@ -22,14 +23,18 @@ const EditBudget = ({budget, handleSave}) => {
 export default EditBudget
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    }, 
-    input: {
-        backgroundColor: 'white'
-    },
-    icon: {
-        marginLeft: 5
-    }
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
+    backgroundColor: 'white'
+  },
+  icon: {
+    marginLeft: 5
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: 600
+  }
 })

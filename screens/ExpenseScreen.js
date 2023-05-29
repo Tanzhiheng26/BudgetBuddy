@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Budget from '../components/Budget'
 import RemainingBudget from '../components/RemainingBudget'
 import ExpenseTotal from '../components/ExpenseTotal'
@@ -7,7 +7,19 @@ import ExpenseList from '../components/ExpenseList'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/native';
 
+
 const Expenses = () => {
+
+    const [displayExpensesList, setDisplayExpensesList] = useState(false);
+
+    const setDate = () => {
+
+        setDisplayExpensesList(true)
+    }
+    const setCategory = () => {
+        setDisplayExpensesList(false)
+    }
+
     const navigation = useNavigation();
     const handleSignOut = () => {
         auth
@@ -38,9 +50,26 @@ const Expenses = () => {
                 </View>
 
 
+                <View style={styles.groupByRow}>
+                    <TouchableOpacity
+                        style={styles.groupBybutton}
+                        onPress={setDate}>
+                        <Text style={styles.groupByButtonText}>Group By: Date</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.groupBybutton}
+                        onPress={setCategory}>
+                        <Text style={styles.groupByButtonText}>Group By: Category</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+                <View>
+                    {displayExpensesList ? <ExpenseList orderBy="Date" /> : <ExpenseList orderBy="Category" />}
+                </View>
 
 
-                <ExpenseList />
+
 
                 <View style={styles.buttoncontainer}>
                     <TouchableOpacity
@@ -50,7 +79,7 @@ const Expenses = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
@@ -63,6 +92,8 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        flex: 1,
+        marginTop: 20
     },
     title: {
         fontSize: 24,
@@ -87,10 +118,42 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginTop: 40,
+        marginBottom: 30
     },
+
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
+    },
+    text: {
+        fontSize: 20,
+    },
+    groupByRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        flex: 1,
+        marginTop: 20,
+        borderBottomWidth: 5,
+
+    },
+    groupBybutton: {
+        backgroundColor: 'white',
+        width: '60%',
+        padding: 0,
+        borderRadius: 0,
+        alignItems: 'center',
+
+        borderWidth: 1,
+        width: 150,
+        justifyContent: 'center',
+        height: 40
+
+
+    },
+    groupByButtonText: {
+        color: 'black',
+        fontWeight: '500',
+        fontSize: 15
     },
 })

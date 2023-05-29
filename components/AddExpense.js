@@ -96,6 +96,8 @@ const AddExpense = () => {
           data={data}
           save='value'
           placeholder='--Select a Category--'
+          search={false}
+          defaultOption={{ key: '--No Category Selected--', value: '--No Category Selected--' }}
         />
 
 
