@@ -10,14 +10,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const Expenses = () => {
 
-    const [displayExpensesList, setDisplayExpensesList] = useState(false);
+    const [displayExpensesList, setDisplayExpensesList] = useState("Date");
 
-    const setDate = () => {
-
-        setDisplayExpensesList(true)
-    }
-    const setCategory = () => {
-        setDisplayExpensesList(false)
+    const setDisplay = () => {
+        if (displayExpensesList == 'Category') setDisplayExpensesList('Date')
+        else setDisplayExpensesList('Category')
     }
 
     const navigation = useNavigation();
@@ -30,8 +27,8 @@ const Expenses = () => {
             .catch(error => alert(error.message))
     }
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+        <SafeAreaView>
+            <ScrollView>
                 <View style={styles.budgetcontainer}>
                     <Text style={styles.title}>My Budget Planner</Text>
                     <View style={styles.components}>
@@ -49,27 +46,14 @@ const Expenses = () => {
                     <Text style={styles.title}>Expenses</Text>
                 </View>
 
-
-                <View style={styles.groupByRow}>
+                <View style={styles.groupByContainer}>
                     <TouchableOpacity
-                        style={styles.groupBybutton}
-                        onPress={setDate}>
-                        <Text style={styles.groupByButtonText}>Group By: Date</Text>
+                        style={styles.groupByButton}
+                        onPress={setDisplay}>
+                        <Text style={styles.groupByButtonText}>Group by: {displayExpensesList}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.groupBybutton}
-                        onPress={setCategory}>
-                        <Text style={styles.groupByButtonText}>Group By: Category</Text>
-                    </TouchableOpacity>
-
                 </View>
-
-                <View>
-                    {displayExpensesList ? <ExpenseList orderBy="Date" /> : <ExpenseList orderBy="Category" />}
-                </View>
-
-
-
+                {displayExpensesList=='Date' ? <ExpenseList orderBy="Date" /> : <ExpenseList orderBy="Category" />}
 
                 <View style={styles.buttoncontainer}>
                     <TouchableOpacity
@@ -86,27 +70,18 @@ const Expenses = () => {
 export default Expenses
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flex: 1,
-        marginTop: 20
-    },
     title: {
         fontSize: 24,
         textAlign: 'center'
     },
     budgetcontainer: {
-        marginTop: 20
+        marginTop: 10
     },
     components: {
         marginTop: 5,
     },
     expensescontainer: {
-        marginTop: 20,
+        marginTop: 10,
     },
     buttoncontainer: {
         alignItems: 'center'
@@ -120,7 +95,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 30
     },
-
     buttonText: {
         color: 'white',
         fontWeight: '700',
@@ -129,31 +103,21 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
     },
-    groupByRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flex: 1,
-        marginTop: 20,
-        borderBottomWidth: 5,
-
-    },
-    groupBybutton: {
-        backgroundColor: 'white',
-        width: '60%',
-        padding: 0,
-        borderRadius: 0,
+    groupByContainer: {
         alignItems: 'center',
-
-        borderWidth: 1,
-        width: 150,
+        marginTop: 10
+    },
+    groupByButton: {
+        backgroundColor: '#F9E79F',
+        alignItems: 'center',
         justifyContent: 'center',
-        height: 40
-
-
+        borderWidth: 1,
+        width: 150,  
+        height: 40,
+        borderRadius: 10,
     },
     groupByButtonText: {
         color: 'black',
-        fontWeight: '500',
         fontSize: 15
     },
 })

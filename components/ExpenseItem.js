@@ -53,9 +53,7 @@ const styles = StyleSheet.create({
     row: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-around',
         marginBottom: 10
-
     },
     text: {
         fontSize: 18,

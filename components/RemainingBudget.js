@@ -19,14 +19,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ABEBC6',
     width: '100%',
     padding: 15,
-    borderRadius: 10,
     alignItems: 'center'
   },
   redcontainer: {
     backgroundColor: '#F5B7B1',
     width: '100%',
     padding: 15,
-    borderRadius: 10,
     alignItems: 'center'
   },
   text: {

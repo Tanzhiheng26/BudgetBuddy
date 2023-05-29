@@ -3,18 +3,18 @@ import React, { useContext } from 'react'
 import { AppContext } from '../context/AppContext';
 import ExpenseItem from './ExpenseItem';
 
-
 const ViewGroupHeader = ({ title }) => {
   return (
     <View style={styles.headerRow}>
       <Text style={styles.headerText}>{title}</Text>
-    </View >)
+    </View >
+  )
 }
 
 const NoExpenseView = () => {
   return (
     <View style={styles.noExpenseViewContainer}>
-      <Text>--No Expense Item Added--</Text>
+      <Text style={{fontSize: 18}}>--No Expense Item Added--</Text>
     </View >
   )
 }
@@ -39,97 +39,77 @@ const ListTitle = ({ title1, title2, title3 }) => {
 const ExpenseList = ({ orderBy }) => {
   const { expenses } = useContext(AppContext);
 
-  function createExpenseItem(id, name, cost, dateISO, category, orderBy) {
+  function createExpenseItem(id, name, cost, date, category, orderBy) {
     return <ExpenseItem key={id}
       id={id}
       name={name}
       cost={cost}
-      date={new Date(dateISO).toLocaleDateString()}
+      date={date.toLocaleDateString()}
       category={category}
       orderBy={orderBy} />
-  }
-
-  function changeISOToLocale(dateISO) {
-    return new Date(dateISO).toLocaleDateString()
   }
 
   function groupByCategory() {
     expenses.sort((a, b) => a.category.localeCompare(b.category))
     let exLength = expenses.length;
     let list = [];
-    let firstExpense = expenses[0]
     if (exLength != 0) {
-      //first category and expense
-      list.push(<ViewGroupHeader key={firstExpense.category} title={firstExpense.category} />)
-      list.push(createExpenseItem(firstExpense.id, firstExpense.name, firstExpense.cost, firstExpense.date, firstExpense.category, "category"))
-
-      for (let i = 1; i < exLength; i++) {
+      for (let i = 0; i < exLength; i++) {
         let expense = expenses[i]
         //check if the category is the same as previous
-        if (expense.category == expenses[i - 1].category) {
-          list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "category"))
-        } else {
+        if (i == 0 || expense.category != expenses[i - 1].category) {
           list.push(<ViewGroupHeader key={expense.category} title={expense.category} />)
-          list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "category"))
         }
+        list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "category"))
       }
     } else (
-      list.push(<NoExpenseView key="1" />)
+      list.push(<NoExpenseView key="0" />)
     )
     return list;
   }
-
 
   function groupByDate() {
-    expenses.sort((a, b) => new Date(b.date) - new Date(a.date))
+    expenses.sort((a, b) => b.date - a.date)
     let exLength = expenses.length;
     let list = [];
-    let firstExpense = expenses[0]
     if (exLength != 0) {
-      //first date and expense
-      list.push(<ViewGroupHeader key={changeISOToLocale(firstExpense.date)} title={changeISOToLocale(firstExpense.date)} />)
-      list.push(createExpenseItem(firstExpense.id, firstExpense.name, firstExpense.cost, firstExpense.date, firstExpense.category, "Date"))
-
-      for (let i = 1; i < exLength; i++) {
+      for (let i = 0; i < exLength; i++) {
         let expense = expenses[i]
         //check if the date is the same as previous
-        if (changeISOToLocale(expense.date) == changeISOToLocale(expenses[i - 1].date)) {
-          list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
-        } else {
-          list.push(<ViewGroupHeader key={changeISOToLocale(expense.date)} title={changeISOToLocale(expense.date)} />)
-          list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
-        }
+        if (i == 0 || expense.date.toLocaleDateString() != expenses[i - 1].date.toLocaleDateString()) {
+          list.push(<ViewGroupHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
+        } 
+        list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
       }
     } else (
-      list.push(<NoExpenseView key="1" />)
+      list.push(<NoExpenseView key="0" />)
     )
     return list;
   }
 
-
-
-  return orderBy == "Date" ? (
+  return orderBy == "Date" 
+  ? (
     <View>
       <ListTitle title1="Name" title2="Category" title3="Cost" />
-      {groupByDate().map((element) => element)}
+      {groupByDate()}
     </View>
-  ) :
-    (<View>
+  ) 
+  : (
+    <View>
       <ListTitle title1="Name" title2="Date" title3="Cost" />
-      {groupByCategory().map((element) => element)}
+      {groupByCategory()}
     </View>
-    )
+  )
 }
 
 export default ExpenseList
 
 const styles = StyleSheet.create({
   headerRow: {
-    flex: 1,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 20,
-    marginTop: 30,
+    marginBottom: 10,
+    marginTop: 10,
     borderBottomWidth: 2
   },
   headerText: {
@@ -142,15 +122,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    flex: 1,
-    marginTop: 20,
-
-
+    marginTop: 10,
   },
   text: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-
-}
-)
+})

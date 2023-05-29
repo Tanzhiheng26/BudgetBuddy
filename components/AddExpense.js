@@ -26,7 +26,7 @@ const AddExpense = () => {
     setShow(true);
   };
 
-  //category
+  //Category
   const [category, setCategory] = useState('');
   const data = [
     { key: '1', value: 'Transport' },
@@ -43,7 +43,6 @@ const AddExpense = () => {
       id: uuid.v4(),
       name: name,
       cost: parseInt(cost),
-      // date: date.toISOString(),
       date: date,
       category: category
     }
@@ -57,7 +56,7 @@ const AddExpense = () => {
 
     setName('')
     setCost('')
-
+    setDate(new Date())
   }
 
   return (
@@ -89,8 +88,6 @@ const AddExpense = () => {
             onChange={onChange}
           />
         )}
-
-
         <SelectList
           setSelected={setCategory}
           data={data}
@@ -98,12 +95,8 @@ const AddExpense = () => {
           placeholder='--Select a Category--'
           search={false}
           defaultOption={{ key: '--No Category Selected--', value: '--No Category Selected--' }}
+          boxStyles={styles.input}
         />
-
-
-
-
-
       </View>
       <TouchableOpacity
         style={styles.button}
