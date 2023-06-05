@@ -11,6 +11,14 @@ const ViewGroupHeader = ({ title }) => {
   )
 }
 
+const DateHeader = ({ title }) => {
+  return (
+    <View style={styles.dateRow}>
+      <Text style={styles.dateText}>{title}</Text>
+    </View >
+  )
+}
+
 const NoExpenseView = () => {
   return (
     <View style={styles.noExpenseViewContainer}>
@@ -50,7 +58,9 @@ const ExpenseList = ({ orderBy }) => {
   }
 
   function groupByCategory() {
-    expenses.sort((a, b) => a.category.localeCompare(b.category))
+    expenses.sort((a, b) => {
+        return a.category.localeCompare(b.category) == 0 ? b.date - a.date : a.category.localeCompare(b.category)
+    })
     let exLength = expenses.length;
     let list = [];
     if (exLength != 0) {
@@ -69,15 +79,24 @@ const ExpenseList = ({ orderBy }) => {
   }
 
   function groupByDate() {
-    expenses.sort((a, b) => b.date - a.date)
+    // Ignore the time for each date object
+    expenses.sort((a, b) => {
+      a.date.setHours(0, 0, 0, 0)
+      b.date.setHours(0, 0, 0, 0)
+      return b.date - a.date == 0 ? a.category.localeCompare(b.category) : b.date - a.date;
+    })
     let exLength = expenses.length;
     let list = [];
     if (exLength != 0) {
       for (let i = 0; i < exLength; i++) {
         let expense = expenses[i]
+        if (i == 0 || expense.date.getMonth() != expenses[i - 1].date.getMonth()) {
+          list.push(<ViewGroupHeader key={expense.date.toLocaleString()} 
+              title={expense.date.toLocaleString('default', {month: 'short'})} />)
+        }
         //check if the date is the same as previous
         if (i == 0 || expense.date.toLocaleDateString() != expenses[i - 1].date.toLocaleDateString()) {
-          list.push(<ViewGroupHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
+          list.push(<DateHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
         } 
         list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
       }
@@ -112,8 +131,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderBottomWidth: 2
   },
+  dateRow: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 10,
+    marginTop: 5,
+  },
   headerText: {
-    fontSize: 18
+    fontSize: 18,
+  },
+  dateText: {
+    fontSize: 18,
+    textDecorationLine: 'underline'
   },
   noExpenseViewContainer: {
     alignItems: 'center',
