@@ -31,6 +31,7 @@ const AddExpense = () => {
   const data = [
     { key: '1', value: 'Transport' },
     { key: '2', value: 'Food' },
+    { key: '3', value: 'Others'}
   ]
 
 
@@ -42,7 +43,7 @@ const AddExpense = () => {
     const expense = {
       id: uuid.v4(),
       name: name,
-      cost: parseInt(cost),
+      cost: parseFloat(cost),
       date: date,
       category: category
     }
@@ -73,7 +74,7 @@ const AddExpense = () => {
           onChangeText={setCost}
           value={cost}
           placeholder="Cost"
-          keyboardType="numeric"
+          keyboardType="decimal-pad"
         />
         <TouchableOpacity
           style={styles.input}
@@ -92,9 +93,8 @@ const AddExpense = () => {
           setSelected={setCategory}
           data={data}
           save='value'
-          placeholder='--Select a Category--'
           search={false}
-          defaultOption={{ key: '--No Category Selected--', value: '--No Category Selected--' }}
+          defaultOption={{ key: 'Others', value: '--Select a Category--' }}
           boxStyles={styles.input}
         />
       </View>
