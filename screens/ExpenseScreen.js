@@ -6,18 +6,42 @@ import ExpenseTotal from '../components/ExpenseTotal'
 import ExpenseList from '../components/ExpenseList'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/native';
-
+import DatePicker from 'react-native-modern-datepicker';
 
 const Expenses = () => {
 
     const [displayExpensesList, setDisplayExpensesList] = useState("Date");
+    currDate = new Date();
+    const [date, setDate] = useState(currDate.getFullYear() + " " + (currDate.getMonth() + 1));
+    const [show, setShow] = useState(false);
+    const [year, month] = date.split(" ");
 
     const setDisplay = () => {
         if (displayExpensesList == 'Category') setDisplayExpensesList('Date')
         else setDisplayExpensesList('Category')
     }
 
+    // Month picker
+    const onChange = (selectedDate) => {
+        setShow(false);
+        setDate(selectedDate);
+    };
+
+    const showDatepicker = () => {
+        setShow(true);
+    };
+
+    function getMonth(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+      
+        return date.toLocaleString([], {
+          month: 'short',
+        });
+    }
+
     const navigation = useNavigation();
+    
     const handleSignOut = () => {
         auth
             .signOut()
@@ -26,6 +50,7 @@ const Expenses = () => {
             })
             .catch(error => alert(error.message))
     }
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -46,14 +71,30 @@ const Expenses = () => {
                     <Text style={styles.title}>Expenses</Text>
                 </View>
 
+                <TouchableOpacity
+                    style={styles.monthButton}
+                    onPress={showDatepicker}>
+                    <Text style={styles.groupByButtonText}>{getMonth(month) + " " + year}</Text>
+                </TouchableOpacity>
+                {show && (
+                    <DatePicker
+                    mode="monthYear"
+                    onMonthYearChange={onChange}
+                    />
+                )}
+
                 <View style={styles.groupByContainer}>
                     <TouchableOpacity
                         style={styles.groupByButton}
                         onPress={setDisplay}>
-                        <Text style={styles.groupByButtonText}>Group by: {displayExpensesList}</Text>
+                        <Text style={styles.groupByButtonText}>Sorted by: {displayExpensesList}</Text>
                     </TouchableOpacity>
                 </View>
-                {displayExpensesList=='Date' ? <ExpenseList orderBy="Date" /> : <ExpenseList orderBy="Category" />}
+                
+
+                {displayExpensesList=='Date' 
+                    ? <ExpenseList orderBy="Date" year={year} month ={month}/> 
+                    : <ExpenseList orderBy="Category" year={year} month ={month}/>}
 
                 <View style={styles.buttoncontainer}>
                     <TouchableOpacity
@@ -104,20 +145,29 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     groupByContainer: {
-        alignItems: 'center',
-        marginTop: 10
+        alignItems: 'flex-end',
+        marginRight: 10,
     },
     groupByButton: {
-        backgroundColor: '#F9E79F',
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 1,
+        elevation: 3, // Android
         width: 150,  
-        height: 40,
+        height: 30,
+        borderRadius: 10,
+    },
+    monthButton: {
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 2, // Android
+        width: 100,  
+        height: 30,
+        marginLeft: 10,
         borderRadius: 10,
     },
     groupByButtonText: {
-        color: 'black',
         fontSize: 15
     },
 })
