@@ -36,8 +36,9 @@ const ListTitle = ({ title1, title2, title3 }) => {
   )
 }
 
-const ExpenseList = ({ orderBy }) => {
+const ExpenseList = ({ orderBy, year, month }) => {
   const { expenses } = useContext(AppContext);
+  const copy = expenses.filter(e => e.date.getFullYear() == year && e.date.getMonth() + 1 == month)
 
   function createExpenseItem(id, name, cost, date, category, orderBy) {
     return <ExpenseItem key={id}
@@ -50,14 +51,16 @@ const ExpenseList = ({ orderBy }) => {
   }
 
   function groupByCategory() {
-    expenses.sort((a, b) => a.category.localeCompare(b.category))
-    let exLength = expenses.length;
+    copy.sort((a, b) => {
+        return a.category.localeCompare(b.category) == 0 ? b.date - a.date : a.category.localeCompare(b.category)
+    })
+    let exLength = copy.length;
     let list = [];
     if (exLength != 0) {
       for (let i = 0; i < exLength; i++) {
-        let expense = expenses[i]
+        let expense = copy[i]
         //check if the category is the same as previous
-        if (i == 0 || expense.category != expenses[i - 1].category) {
+        if (i == 0 || expense.category != copy[i - 1].category) {
           list.push(<ViewGroupHeader key={expense.category} title={expense.category} />)
         }
         list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "category"))
@@ -69,14 +72,19 @@ const ExpenseList = ({ orderBy }) => {
   }
 
   function groupByDate() {
-    expenses.sort((a, b) => b.date - a.date)
-    let exLength = expenses.length;
+    // Ignore the time for each date object
+    copy.sort((a, b) => {
+      a.date.setHours(0, 0, 0, 0)
+      b.date.setHours(0, 0, 0, 0)
+      return b.date - a.date == 0 ? a.category.localeCompare(b.category) : b.date - a.date;
+    })
+    let exLength = copy.length;
     let list = [];
     if (exLength != 0) {
       for (let i = 0; i < exLength; i++) {
-        let expense = expenses[i]
+        let expense = copy[i]
         //check if the date is the same as previous
-        if (i == 0 || expense.date.toLocaleDateString() != expenses[i - 1].date.toLocaleDateString()) {
+        if (i == 0 || expense.date.toLocaleDateString() != copy[i - 1].date.toLocaleDateString()) {
           list.push(<ViewGroupHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
         } 
         list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
@@ -113,7 +121,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   },
   headerText: {
-    fontSize: 18
+    fontSize: 18,
   },
   noExpenseViewContainer: {
     alignItems: 'center',
