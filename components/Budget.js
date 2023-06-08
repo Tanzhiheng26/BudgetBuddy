@@ -32,7 +32,7 @@ export default Budget
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ABB2B9',
+        backgroundColor: '#F9E79F',
         width: '100%',
         padding: 15,
         alignItems: 'center'
