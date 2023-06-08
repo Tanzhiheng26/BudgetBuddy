@@ -1,13 +1,12 @@
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AddScreen from './AddScreen';
 import ExpenseScreen from './ExpenseScreen';
+import EZHomeTabs from './EasySplit/EZHomeTabs';
 import ChartScreen from './ChartScreen';
 import { AppProvider } from '../context/AppContext';
 import { Icon } from '@rneui/themed';
-
+import { auth } from '../firebase'
 const Tab = createBottomTabNavigator();
-
 
 export default function HomeTabs() {
   return (
@@ -19,6 +18,9 @@ export default function HomeTabs() {
           options={{ tabBarIcon: () => <Icon name='add-box' /> }} />
         <Tab.Screen name="Charts" component={ChartScreen} 
           options={{ tabBarIcon: () => <Icon name='bar-chart' /> }} />
+        <Tab.Screen name="EasySplit" component={EZHomeTabs}
+          options={{ tabBarIcon: () => <Icon name='money' /> }} />
+
       </Tab.Navigator>
     </AppProvider>
   );

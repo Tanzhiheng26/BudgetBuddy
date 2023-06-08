@@ -113,6 +113,7 @@ export default AddExpense
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+
   },
   inputContainer: {
     width: '60%',
