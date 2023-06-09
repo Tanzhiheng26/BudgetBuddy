@@ -6,7 +6,7 @@ import { auth } from '../../firebase'
 
 
 const EZGroupExpenseItem = ({ id, uid, name, cost, date, deadline }) => {
-    console.log(deadline)
+
 
     function dataManager() {
 
@@ -14,7 +14,6 @@ const EZGroupExpenseItem = ({ id, uid, name, cost, date, deadline }) => {
         for (let [key, value] of splitData) {
             list.push(() => {
                 return (
-
                     <View>
                         <Text>
                             {key} owe ${value}

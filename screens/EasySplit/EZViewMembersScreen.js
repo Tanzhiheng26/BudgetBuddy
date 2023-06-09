@@ -6,7 +6,7 @@ import EZGroupMembersList from '../../components/EasySplit/EZGroupMembersList';
 
 
 const EZViewMembersScreen = ({ groupID }) => {
-    console.log(groupID)
+
     return (
         <ScrollView>
 

@@ -3,9 +3,10 @@ import AddScreen from './AddScreen';
 import ExpenseScreen from './ExpenseScreen';
 import EZHomeTabs from './EasySplit/EZHomeTabs';
 import ChartScreen from './ChartScreen';
+import ProfileScreen from './ProfileScreen';
 import { AppProvider } from '../context/AppContext';
 import { Icon } from '@rneui/themed';
-import { auth } from '../firebase'
+
 const Tab = createBottomTabNavigator();
 
 export default function HomeTabs() {
@@ -16,10 +17,15 @@ export default function HomeTabs() {
           options={{ tabBarIcon: () => <Icon name='attach-money' /> }} />
         <Tab.Screen name="Add Expense" component={AddScreen}
           options={{ tabBarIcon: () => <Icon name='add-box' /> }} />
-        <Tab.Screen name="Charts" component={ChartScreen} 
+        <Tab.Screen name="Charts" component={ChartScreen}
           options={{ tabBarIcon: () => <Icon name='bar-chart' /> }} />
         <Tab.Screen name="EasySplit" component={EZHomeTabs}
           options={{ tabBarIcon: () => <Icon name='money' /> }} />
+
+        <Tab.Screen name="Profile" component={ProfileScreen}
+          options={{
+            tabBarIcon: () => <Icon name='account' type='material-community' />
+          }} />
 
       </Tab.Navigator>
     </AppProvider>

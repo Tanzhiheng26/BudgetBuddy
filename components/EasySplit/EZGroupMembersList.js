@@ -4,8 +4,6 @@ import { Icon } from '@rneui/themed';
 import { getAllGroupMembers, deleteMember } from '../../firestore';
 
 
-
-
 const GroupOwnerEmail = ({ groupMembersList }) => {
 
     const groupOwnerEmail = groupMembersList.filter(member => member.role === "owner").map(owner => owner.email);
