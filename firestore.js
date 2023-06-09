@@ -51,8 +51,15 @@ export async function getBudget(uid) {
 //EASYSPLIT
 
 
-export async function addUserInfo(uid, email) {
-    setDoc(doc(db, USERS_COLLECTION, uid), { uid, email });
+export async function addUserInfo(uid, email, username) {
+    setDoc(doc(db, USERS_COLLECTION, uid), { uid, email, username });
+}
+
+export async function getUserInfo(uid) {
+    const docRef = doc(db, USERS_COLLECTION, uid);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+
 }
 
 

@@ -34,22 +34,14 @@ const Expenses = () => {
     function getMonth(monthNumber) {
         const date = new Date();
         date.setMonth(monthNumber - 1);
-      
+
         return date.toLocaleString([], {
-          month: 'short',
+            month: 'short',
         });
     }
 
-    const navigation = useNavigation();
-    
-    const handleSignOut = () => {
-        auth
-            .signOut()
-            .then(() => {
-                navigation.replace("Login")
-            })
-            .catch(error => alert(error.message))
-    }
+
+
 
     return (
         <SafeAreaView>
@@ -78,8 +70,8 @@ const Expenses = () => {
                 </TouchableOpacity>
                 {show && (
                     <DatePicker
-                    mode="monthYear"
-                    onMonthYearChange={onChange}
+                        mode="monthYear"
+                        onMonthYearChange={onChange}
                     />
                 )}
 
@@ -90,19 +82,12 @@ const Expenses = () => {
                         <Text style={styles.groupByButtonText}>Sorted by: {displayExpensesList}</Text>
                     </TouchableOpacity>
                 </View>
-                
 
-                {displayExpensesList=='Date' 
-                    ? <ExpenseList orderBy="Date" year={year} month ={month}/> 
-                    : <ExpenseList orderBy="Category" year={year} month ={month}/>}
 
-                <View style={styles.buttoncontainer}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleSignOut}>
-                        <Text style={styles.buttonText}>Sign out</Text>
-                    </TouchableOpacity>
-                </View>
+                {displayExpensesList == 'Date'
+                    ? <ExpenseList orderBy="Date" year={year} month={month} />
+                    : <ExpenseList orderBy="Category" year={year} month={month} />}
+
             </ScrollView>
         </SafeAreaView >
     )
@@ -153,7 +138,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 3, // Android
-        width: 150,  
+        width: 150,
         height: 30,
         borderRadius: 10,
     },
@@ -162,7 +147,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 2, // Android
-        width: 100,  
+        width: 100,
         height: 30,
         marginLeft: 10,
         borderRadius: 10,
