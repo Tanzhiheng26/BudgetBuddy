@@ -4,9 +4,11 @@ import AddScreen from './AddScreen';
 import ExpenseList from './ListScreen';
 import EZHomeTabs from './EasySplit/EZHomeTabs';
 import ChartScreen from './ChartScreen';
+import ProfileScreen from './ProfileScreen';
 import { AppProvider } from '../context/AppContext';
 import { Icon } from '@rneui/themed'
 import ExpenseScreen from './ExpenseScreen';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +24,10 @@ export default function HomeTabs() {
           options={{ tabBarIcon: () => <Icon name='bar-chart' /> }} />
         <Tab.Screen name="EasySplit" component={EZHomeTabs}
           options={{ tabBarIcon: () => <Icon name='money' /> }} />
+        <Tab.Screen name="Profile" component={ProfileScreen}
+          options={{
+            tabBarIcon: () => <Icon name='account' type='material-community' />
+          }} />
       </Tab.Navigator>
     </AppProvider>
   );

@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
@@ -7,6 +7,7 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { addUserInfo } from '../firestore';
 
 const RegisterScreen = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
@@ -29,7 +30,7 @@ const RegisterScreen = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         const user = userCredential.user;
-        addUserInfo(user.uid, user.email);
+        addUserInfo(user.uid, user.email, username);
         console.log("Registered with: ", user.email);
       })
       .catch(error => alert(error.message))
@@ -41,9 +42,17 @@ const RegisterScreen = () => {
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : '0'}
+          keyboardVerticalOffset
         >
+
           <View style={styles.inputContainer}>
+            <TextInput
+              placeholder='Username'
+              value={username}
+              onChangeText={text => setUsername(text)}
+              style={styles.input}
+            />
             <TextInput
               placeholder='Email'
               value={email}
@@ -73,6 +82,8 @@ const RegisterScreen = () => {
               <Text style={styles.buttonOutLineText}>Register</Text>
             </TouchableOpacity>
           </View>
+
+
         </KeyboardAvoidingView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -86,6 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   inputContainer: {
     width: '80%',

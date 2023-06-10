@@ -1,11 +1,7 @@
 
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-
 import { useNavigation } from '@react-navigation/native';
-
-
-
 
 const EZGroupItem = ({ groupName, groupID }) => {
     const navigation = useNavigation();
