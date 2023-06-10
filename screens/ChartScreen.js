@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   monthText: {
-      fontSize: 15
+    fontWeight: '500',
+    fontSize: 16
   },
   noExpenseViewContainer: {
     alignItems: 'center',

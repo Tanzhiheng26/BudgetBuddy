@@ -5,7 +5,7 @@ import AddExpense from '../components/AddExpense'
 const AddScreen = () => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Add Expense</Text>
+            <Text style={styles.title}>Expense Details</Text>
             <View>
                 <AddExpense />
             </View>

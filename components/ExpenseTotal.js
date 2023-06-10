@@ -4,7 +4,10 @@ import { AppContext } from '../context/AppContext';
 
 const ExpenseTotal = () => {
   const { expenses } = useContext(AppContext);
-  const totalExpenses = expenses.reduce((total, item) => { return total + item.cost }, 0)
+  currDate = new Date();
+  const totalExpenses = expenses
+      .filter(e => e.date.getFullYear() == currDate.getFullYear() && e.date.getMonth() == currDate.getMonth())
+      .reduce((total, item) => { return total + item.cost }, 0)
   return (
     <View style={styles.container}>
       <Text style={styles.text} >Spent so far: ${totalExpenses}</Text>
