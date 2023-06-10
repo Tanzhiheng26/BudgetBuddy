@@ -102,7 +102,7 @@ const AddExpense = () => {
         style={styles.button}
         onPress={onSubmit}
       >
-        <Text style={styles.buttonText}>Add Expense</Text>
+        <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
