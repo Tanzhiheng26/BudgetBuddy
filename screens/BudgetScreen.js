@@ -3,21 +3,11 @@ import React, { useContext } from 'react'
 import Budget from '../components/Budget'
 import RemainingBudget from '../components/RemainingBudget'
 import ExpenseTotal from '../components/ExpenseTotal'
-import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { AppContext } from '../context/AppContext'
 
 const BudgetScreen = () => {
-    const handleSignOut = () => {
-        auth
-            .signOut()
-            .then(() => {
-                navigation.replace("Login")
-            })
-            .catch(error => alert(error.message))
-    }
-
     const navigation = useNavigation();
 
     function getMonthYear() {
@@ -32,6 +22,7 @@ const BudgetScreen = () => {
 
     function getPercentage() {
         const { budget, expenses } = useContext(AppContext);
+        if (budget == 0) return 0;
         currDate = new Date();
         const totalExpenses = expenses
             .filter(e => e.date.getFullYear() == currDate.getFullYear() && e.date.getMonth() == currDate.getMonth())
@@ -61,14 +52,6 @@ const BudgetScreen = () => {
                 <Animated.View style={[StyleSheet.absoluteFill, {backgroundColor, width }]}/>
             </View> 
             <Text>{getPercentage()}% of budget spent</Text>
-        </View>
-
-        <View style={styles.buttoncontainer}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleSignOut}>
-                <Text style={styles.buttonText}>Sign out</Text>
-            </TouchableOpacity>
         </View>
     </View>
   )
