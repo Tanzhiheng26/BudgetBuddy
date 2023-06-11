@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { createGroup } from '../../firestore';
+import { createGroup, emailToUserName } from '../../firestore';
 import { auth } from '../../firebase';
 import uuid from 'react-native-uuid';
 
@@ -9,21 +9,32 @@ import uuid from 'react-native-uuid';
 
 const EZAddGroupScreen = () => {
     [groupName, setGroupName] = useState('');
-
+    [ownerUserName, setOwnerUserName] = useState('')
 
     const navigation = useNavigation();
+
+
+    async function fetchUsernameFromEmail() {
+        try {
+            const uid = await emailToUserName(auth.currentUser.email);
+            setOwnerUserName(uid)
+        } catch (error) {
+            console.error('Failed to fetch data:', error);
+        }
+    }
+
+    fetchUsernameFromEmail();
 
 
     const onSubmit = async () => {
         if (groupName === '') {
             return;
         }
+
+
+
         groupID = uuid.v4()
-        createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email);
-
-
-
-
+        createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email, ownerUserName);
         setGroupName('')
         navigation.replace('EZHomeScreen')
 

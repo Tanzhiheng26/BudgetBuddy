@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 
-import { emailToID, addGroupMember, getGroupInfo } from '../../firestore'
+import { emailToID, addGroupMember, getGroupInfo, uidToUserName, emailToUserName } from '../../firestore'
 
 
 const EZEditMemberScreen = ({ groupID }) => {
     [groupName, setGroupName] = useState('');
     [groupMemberEmail, setGroupMemberEmail] = useState('');
     [groupMemberUID, setGroupMemberUID] = useState('');
+    [groupMemberUsername, setGroupMemberUsername] = useState('');
 
 
     useEffect(() => {
@@ -21,24 +22,28 @@ const EZEditMemberScreen = ({ groupID }) => {
             }
         }
         fetchGroupInfo();
+
+
     }, [])
 
-    async function fetchUIDFromEmail() {
+    async function fetchUIDAndUsernameFromEmail() {
         try {
             const uid = await emailToID(groupMemberEmail);
+            const username = await emailToUserName(groupMemberEmail);
             setGroupMemberUID(uid)
+            setGroupMemberUsername(username)
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
     }
-    fetchUIDFromEmail();
 
 
     const onSubmit = async () => {
         if (groupMemberEmail === '') {
             return;
         }
-        addGroupMember(groupMemberUID, groupID, groupName, groupMemberEmail)
+        fetchUIDAndUsernameFromEmail();
+        addGroupMember(groupMemberUID, groupID, groupName, groupMemberEmail, groupMemberUsername)
         setGroupMemberEmail('')
     }
 
