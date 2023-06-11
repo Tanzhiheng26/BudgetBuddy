@@ -4,7 +4,6 @@ import EZGroupList from '../../components/EasySplit/EZGroupsList';
 import { getGroups } from '../../firestore';
 import { Icon } from '@rneui/base';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { log } from 'react-native-reanimated';
 import { auth } from '../../firebase';
 
 
@@ -30,7 +29,6 @@ const EZHomeScreen = () => {
         }
     }, [isFocused])
 
-
     return (
         <ScrollView>
             <View style={{ alignItems: 'center', marginTop: 20, flex: 1 }}>
@@ -41,17 +39,11 @@ const EZHomeScreen = () => {
                     <TouchableOpacity
                         style={styles.addGroupButton}
                         onPress={() => navigation.navigate("Add New Group")}>
-
                         <Icon name='add' size={50} />
-
                     </TouchableOpacity>
                 </View>
-
             </View>
         </ScrollView>
-
-
-
     )
 }
 

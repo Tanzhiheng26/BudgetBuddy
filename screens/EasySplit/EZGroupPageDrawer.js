@@ -1,7 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import EZGroupPage from './EZGroupPage';
-import EZEditMemberScreen from './EZEditMemberScreen';
-import EZViewMembersScreen from './EZViewMembersScreen';
+import EZManageMembersScreen from './EZManageMembersScreen';
 import EZAddGroupExpense from './EZAddGroupExpense';
 
 const Drawer = createDrawerNavigator();
@@ -19,17 +18,9 @@ export default function EZGroupPageDrawer({ route }) {
                 {() => <EZAddGroupExpense groupID={groupID} />}
             </Drawer.Screen>
 
-            <Drawer.Screen name="Edit Group Member " options={{ unmountOnBlur: true }}>
-                {() => <EZEditMemberScreen groupID={groupID} />}
+            <Drawer.Screen name="Manage Group Members " options={{ unmountOnBlur: true }}>
+                {() => <EZManageMembersScreen groupID={groupID} />}
             </Drawer.Screen>
-
-            <Drawer.Screen name="View Group Members " options={{ unmountOnBlur: true }}>
-                {() => <EZViewMembersScreen groupID={groupID} />}
-            </Drawer.Screen>
-
-
-
-
 
         </Drawer.Navigator>)
 }
