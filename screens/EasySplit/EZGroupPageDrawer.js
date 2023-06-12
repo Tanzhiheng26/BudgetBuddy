@@ -10,17 +10,16 @@ export default function EZGroupPageDrawer({ route }) {
 
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="Group Page " options={{ unmountOnBlur: true }}>
+            <Drawer.Screen name="Group Page "  /*options={{ unmountOnBlur: true }}*/>
                 {() => <EZGroupPage groupID={groupID} />}
             </Drawer.Screen>
 
-            <Drawer.Screen name="Add Group Expense " options={{ unmountOnBlur: true }}>
+            <Drawer.Screen name="Add Group Expense " /*options={{ unmountOnBlur: true }}*/>
                 {() => <EZAddGroupExpense groupID={groupID} />}
             </Drawer.Screen>
 
-            <Drawer.Screen name="Manage Group Members " options={{ unmountOnBlur: true }}>
+            <Drawer.Screen name="Group Members ">
                 {() => <EZManageMembersScreen groupID={groupID} />}
             </Drawer.Screen>
-
         </Drawer.Navigator>)
 }

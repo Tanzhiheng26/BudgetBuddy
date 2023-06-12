@@ -27,6 +27,10 @@ const RegisterScreen = () => {
       alert("Passwords do not match");
       return;
     }
+    if (username === '') {
+      alert("Please enter a username")
+      return;
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         const user = userCredential.user;

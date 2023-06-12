@@ -24,12 +24,6 @@ const EZGroupPage = ({ groupID }) => {
         fetchGroupInfo();
     }, [])
 
-
-
-
-
-
-
     function isOwner() {
         return (groupInfo.ownerUID == auth.currentUser.uid)
     }

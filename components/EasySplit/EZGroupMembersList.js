@@ -56,6 +56,19 @@ export const EmailItem = ({ member, groupID, handleDeleteMember }) => {
     )
 }
 
+export const EmailItemNoDelete = ({ member }) => {
+    return (
+        <View style={{ flexDirection: 'row', paddingRight: 10 }}>
+            <View style={{ flex: 0.4, alignItems: 'center' }}>
+                <Text style={styles.emailText}>{member.username}</Text>
+            </View>
+            <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.emailText}>{member.email}</Text>
+            </View>
+        </View>
+    )
+}
+
 export const NoMemberAdded = () => {
     return (
         <View style={{ alignItems: 'center', paddingTop: 10 }}>
@@ -77,15 +90,29 @@ export function emailList({ groupMembers }, { groupID }, handleDeleteMember) {
     return list;
 }
 
-export const GroupMembers = ({ groupMembersList, groupID, handleDeleteMember }) => {
+export function emailListNoDelete({ groupMembers }) {
+    let list = [];
+    if (groupMembers.length === 0) {
+        list.push(<NoMemberAdded key={'0'} />)
+    } else {
+        list.push(<Header key={'0'} role='member' />)
+        for (let i = 0; i < groupMembers.length; i++) {
+            list.push(<EmailItemNoDelete key={groupMembers[i].email} member={groupMembers[i]} />)
+        }
+    }
+    return list;
+}
+
+export const GroupMembers = ({ groupMembersList, groupID, isOwner, handleDeleteMember }) => {
     const groupMembers = groupMembersList.filter(member => member.role === "member");
     return (
         <View>
-            {emailList({ groupMembers }, { groupID }, handleDeleteMember)}
+            {isOwner
+            ? emailList({ groupMembers }, { groupID }, handleDeleteMember)
+            : emailListNoDelete({ groupMembers})}
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
 

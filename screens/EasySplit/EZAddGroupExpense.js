@@ -89,16 +89,13 @@ const EZAddGroupExpense = ({ groupID }) => {
                         onChange={onChangeDeadline}
                     />
                 )}
-
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={onSubmit}
-                >
-                    <Text style={styles.buttonText}>Add Expense</Text>
-                </TouchableOpacity>
             </View>
-
+            <TouchableOpacity
+              style={styles.button}
+              onPress={onSubmit}
+            >
+                <Text style={styles.buttonText}>Add Expense</Text>
+            </TouchableOpacity>
         </KeyboardAvoidingView >
 
     )
@@ -111,7 +108,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     inputContainer: {
         width: '60%',
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#0782F9',
-        width: '60%',
+        width: '40%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',

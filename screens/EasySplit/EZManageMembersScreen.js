@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { Header, GroupMembers, GroupOwner } from '../../components/EasySplit/EZGroupMembersList';
-
+import { auth } from '../../firebase';
 import { Icon } from '@rneui/themed';
 import { getAllGroupMembers, emailToID, emailToUserName, getGroupInfo, addGroupMember, deleteMember, deleteGroup } from '../../firestore';
 
 
-const EZViewMembersScreen = ({ groupID }) => {
+const EZManageMembersScreen = ({ groupID }) => {
     const navigation = useNavigation();
 
     const [groupMembersList, setGroupMembersList] = useState([]);
     const [refresh, setRefresh] = useState(false)
     const [groupName, setGroupName] = useState('');
     const [groupMemberEmail, setGroupMemberEmail] = useState('');
-    const [placeholder, setPlaceholder] = useState("Add Group Member's Email")
+    const [groupOwner, setGroupOwner] = useState('');
 
     const handleDeleteMember = (uid, groupID) => {
         deleteMember(uid, groupID);
@@ -32,6 +32,7 @@ const EZViewMembersScreen = ({ groupID }) => {
             try {
                 const info = await getGroupInfo(groupID);
                 setGroupName(info.groupName);
+                setGroupOwner(info.ownerUID);
                 const list = await getAllGroupMembers(groupID);
                 setGroupMembersList(list)
             } catch (error) {
@@ -40,6 +41,10 @@ const EZViewMembersScreen = ({ groupID }) => {
         }
         fetchGroupInfo();
     }, [refresh])
+
+    function isOwner() {
+        return (groupOwner === auth.currentUser.uid)
+    }
 
     async function fetchUIDAndUsernameFromEmail() {
         try {
@@ -55,17 +60,24 @@ const EZViewMembersScreen = ({ groupID }) => {
         if (groupMemberEmail === '') {
             return;
         }
+        // Prevent the owner from changing into a member
+        if (groupMemberEmail === auth.currentUser.email) {
+            alert('You cannot enter your own email');
+            setGroupMemberEmail('')
+            return; 
+        }
         try {
             const result = await fetchUIDAndUsernameFromEmail();
-            await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username)
+            if (result.uid === undefined) {
+                alert('Please enter a valid email')   
+            } else {
+                await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
+                setRefresh(!refresh);
+            }
             setGroupMemberEmail('')
         } catch (error) {
-            console.log(error)
-            setGroupMemberEmail('')
-            setPlaceholder('Please enter a valid email')
-        } finally {
-            setRefresh(!refresh)
-        }
+            console.error(error)         
+        } 
     }
 
     return (
@@ -82,35 +94,41 @@ const EZViewMembersScreen = ({ groupID }) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Members</Text>
                     </View>
-
+                    {isOwner() 
+                    ? 
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <TextInput
                             style={styles.input}
                             onChangeText={setGroupMemberEmail}
                             value={groupMemberEmail}
-                            placeholder={placeholder}
+                            placeholder={"Add Group Member's Email"}
                         />
                         <View style={{ padding: 10 }}>
                             <Icon type='antdesign' name='adduser' onPress={onSubmit} />
                         </View>
                     </View>
-                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} handleDeleteMember={handleDeleteMember} />
+                    : <></>
+                    }
+                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} isOwner ={isOwner()} handleDeleteMember={handleDeleteMember} />
                 </View >
 
                 <View style={{ alignItems: 'center' }} >
+                    {isOwner() ?
                     <TouchableOpacity
                         style={styles.button}
                         onPress={onDeleteGroup}
                     >
                         <Text style={styles.buttonText}>Delete Group</Text>
                     </TouchableOpacity>
+                    : <></>
+                    }       
                 </View>
             </ScrollView >
         </View>
     )
 }
 
-export default EZViewMembersScreen;
+export default EZManageMembersScreen;
 
 const styles = StyleSheet.create({
     container: {

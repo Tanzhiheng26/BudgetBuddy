@@ -13,12 +13,17 @@ const Budget = () => {
 		setIsEditing(true);
 	};
   const handleSave = (value) => {
+    let newBudget = parseFloat(value)
+    if (newBudget < 0) {
+      alert("Cost cannot be negative.")
+      return;
+    }
     dispatch({
       type: 'SET_BUDGET',
-      payload: value,
+      payload: newBudget,
     });
     setIsEditing(false);
-    editBudget(auth.currentUser?.uid, value);
+    editBudget(auth.currentUser?.uid, newBudget);
 	};
   return (
     <View style={styles.container}>
