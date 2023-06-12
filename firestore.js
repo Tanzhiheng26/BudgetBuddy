@@ -59,40 +59,45 @@ export async function getUserInfo(uid) {
     const docRef = doc(db, USERS_COLLECTION, uid);
     const docSnap = await getDoc(docRef);
     return docSnap.data();
-
 }
 
 
-export async function createGroup(uid, groupID, groupName, email) {
-
+export async function createGroup(uid, groupID, groupName, email, username) {
     const groupRef = collection(db, ALLGROUPS_COLLECTION)
     setDoc(doc(groupRef, groupID), { ownerUID: uid, groupID, groupName })
     const membersRef = collection(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION)
-    setDoc(doc(membersRef, uid), { uid, role: 'owner', email })
+    setDoc(doc(membersRef, uid), { uid, role: 'owner', email, username })
     const userRef = collection(db, USERS_COLLECTION, uid, GROUPS_COLLECTION)
     setDoc(doc(userRef, groupID), { groupID, groupName, role: 'owner' })
 }
 
-export async function addGroupMember(uid, groupID, groupName, email) {
+export async function addGroupMember(uid, groupID, groupName, email, username) {
     const membersRef = collection(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION)
-    setDoc(doc(membersRef, uid), { uid, role: 'member', email })
+    setDoc(doc(membersRef, uid), { uid, role: 'member', email, username })
     const userRef = collection(db, USERS_COLLECTION, uid, GROUPS_COLLECTION)
     setDoc(doc(userRef, groupID), { groupID, groupName, role: 'member', email })
 }
+
 
 export async function emailToID(email) {
     const users = query(collection(db, USERS_COLLECTION), where("email", "==", email));
     const querySnapshot = await getDocs(users);
     let uid;
-
     for (const documentSnapshot of querySnapshot.docs) {
-
         uid = documentSnapshot.data().uid;
     }
     return uid;
 }
 
-
+export async function emailToUserName(email) {
+    const users = query(collection(db, USERS_COLLECTION), where("email", "==", email));
+    const querySnapshot = await getDocs(users);
+    let username;
+    for (const documentSnapshot of querySnapshot.docs) {
+        username = documentSnapshot.data().username;
+    }
+    return username;
+}
 
 export async function getGroups(uid) {
     const groups = collection(db, USERS_COLLECTION, uid, GROUPS_COLLECTION);
@@ -105,13 +110,11 @@ export async function getGroups(uid) {
             groupName: group.groupName,
         })
     }
-
     return allGroups;
 }
 
 export async function getGroupInfo(groupID) {
     const docRef = doc(db, ALLGROUPS_COLLECTION, groupID);
-
     const docSnap = await getDoc(docRef);
     return docSnap.data();
 
@@ -127,7 +130,8 @@ export async function getAllGroupMembers(groupID) {
         allMembers.push({
             uid: member.uid,
             email: member.email,
-            role: member.role
+            role: member.role,
+            username: member.username
         })
     }
 
@@ -139,26 +143,23 @@ export async function deleteMember(uid, groupID) {
     deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION, uid));
 }
 
-/*
-export asnyc function deleteGroup(groupID) {
-    //get list of uid 
+
+export async function deleteGroup(groupID) {
     const members = collection(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION);
     const querySnapshot = await getDocs(members);
-
     let allMembers = [];
     for (const documentSnapshot of querySnapshot.docs) {
         const member = documentSnapshot.data();
-        allMembers.push({
+        allMembers.push(
             member.uid,
-        })
-    for (memberUID in allMembers) {
-        deleteDoc(doc(db, USERS_COLLECTION, memberUID, GROUPS_COLLECTION, groupID));}
-
- //deleting doc will not delete the sub collection
-    deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID));
-   
+        )
+        for (const uid of allMembers) {
+            deleteDoc(doc(db, USERS_COLLECTION, uid, GROUPS_COLLECTION, groupID));
+            deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION, uid))
+        }
+        deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID));
+    }
 }
-*/
 
 /*
 

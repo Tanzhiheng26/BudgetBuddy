@@ -4,21 +4,8 @@ import EZGroupItem from './EZGroupItem'
 import { getGroups } from '../../firestore';
 import { auth } from '../../firebase'
 
-const EZGroupList = () => {
-    const [groupList, setGroupList] = useState([])
+const EZGroupList = ({ groupList }) => {
 
-    useEffect(() => {
-        async function fetchUserGroups() {
-            try {
-                const groups = await getGroups(auth.currentUser.uid);
-                setGroupList(groups);
-
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-            }
-        }
-        fetchUserGroups();
-    }, [])
 
     return (
         <View style={styles.container}>

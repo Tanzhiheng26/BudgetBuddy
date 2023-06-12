@@ -1,122 +1,140 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native'
 import { Icon } from '@rneui/themed';
-import { getAllGroupMembers, deleteMember } from '../../firestore';
 
-
-const GroupOwnerEmail = ({ groupMembersList }) => {
-
+export const GroupOwner = ({ groupMembersList }) => {
     const groupOwnerEmail = groupMembersList.filter(member => member.role === "owner").map(owner => owner.email);
-
+    const groupOwnerUsername = groupMembersList.filter(member => member.role === "owner").map(owner => owner.username);
     return (
-        <View>
-            <Text style={styles.emailText}>{groupOwnerEmail[0]}</Text>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+            <View style={styles.usernameContainer}>
+                <Text style={styles.emailText}>{groupOwnerUsername[0]}</Text>
+            </View>
+            <View style={styles.emailContainer}>
+                <Text style={styles.emailText}>{groupOwnerEmail[0]}</Text>
+            </View>
         </View>
     )
 }
 
-function removeMember(uid, groupID) {
-    deleteMember(uid, groupID)
-}
-
-const EmailItem = ({ member, groupID }) => {
-
-    return (
-        <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.emailText}>{member.email}</Text>
-
+export const Header = ({ role }) => {
+    return (role === 'owner') ? (
+        <View style={{ flexDirection: 'row', padding: 10 }}>
+            <View style={styles.usernameContainer}>
+                <Text style={styles.userNameEmailTitle}>Username</Text>
+            </View>
+            <View style={styles.emailContainer}>
+                <Text style={styles.userNameEmailTitle}>Email</Text>
+            </View>
+        </View>
+    ) : (
+        <View style={{ flexDirection: 'row', padding: 10 }}>
+            <View style={{ flex: 0.4, alignItems: 'center' }}>
+                <Text style={styles.userNameEmailTitle}>Username</Text>
+            </View>
+            <View style={{ flex: 0.5, alignItems: 'center' }}>
+                <Text style={styles.userNameEmailTitle}>Email</Text>
+            </View>
         </View>
     )
 }
 
-const NoMemberAdded = () => {
+export const EmailItem = ({ member, groupID, handleDeleteMember }) => {
     return (
-        <View>
+        <View style={{ flexDirection: 'row', paddingRight: 10 }}>
+
+            <View style={{ flex: 0.4, alignItems: 'center' }}>
+                <Text style={styles.emailText}>{member.username}</Text>
+            </View>
+            <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.emailText}>{member.email}</Text>
+            </View>
+            <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'flex-end' }}>
+                <Icon type='antdesign' name='deleteuser' onPress={() => handleDeleteMember(member.uid, groupID)} />
+            </View>
+        </View>
+    )
+}
+
+export const EmailItemNoDelete = ({ member }) => {
+    return (
+        <View style={{ flexDirection: 'row', paddingRight: 10 }}>
+            <View style={{ flex: 0.4, alignItems: 'center' }}>
+                <Text style={styles.emailText}>{member.username}</Text>
+            </View>
+            <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.emailText}>{member.email}</Text>
+            </View>
+        </View>
+    )
+}
+
+export const NoMemberAdded = () => {
+    return (
+        <View style={{ alignItems: 'center', paddingTop: 10 }}>
             <Text style={styles.emailText}>--- No Group Members Added ---</Text>
         </View>
     )
 }
 
-function emailList({ groupMembers }, { groupID }) {
-
+export function emailList({ groupMembers }, { groupID }, handleDeleteMember) {
     let list = [];
     if (groupMembers.length === 0) {
         list.push(<NoMemberAdded key={'0'} />)
     } else {
+        list.push(<Header key={'0'} role='member' />)
         for (let i = 0; i < groupMembers.length; i++) {
-            list.push(<EmailItem key={groupMembers[i].email} member={groupMembers[i]} groupID={groupID} />)
+            list.push(<EmailItem key={groupMembers[i].email} member={groupMembers[i]} groupID={groupID} handleDeleteMember={handleDeleteMember} />)
         }
     }
     return list;
 }
 
-const GroupMembersEmail = ({ groupMembersList, groupID }) => {
+export function emailListNoDelete({ groupMembers }) {
+    let list = [];
+    if (groupMembers.length === 0) {
+        list.push(<NoMemberAdded key={'0'} />)
+    } else {
+        list.push(<Header key={'0'} role='member' />)
+        for (let i = 0; i < groupMembers.length; i++) {
+            list.push(<EmailItemNoDelete key={groupMembers[i].email} member={groupMembers[i]} />)
+        }
+    }
+    return list;
+}
 
+export const GroupMembers = ({ groupMembersList, groupID, isOwner, handleDeleteMember }) => {
     const groupMembers = groupMembersList.filter(member => member.role === "member");
-
     return (
         <View>
-            {emailList({ groupMembers }, { groupID })}
+            {isOwner
+            ? emailList({ groupMembers }, { groupID }, handleDeleteMember)
+            : emailListNoDelete({ groupMembers})}
         </View>
     )
 }
 
-
-const EZGroupMembersList = ({ groupID }) => {
-    const [groupMembersList, setGroupMembersList] = useState([]);
-
-    useEffect(() => {
-        async function fetchGroupMembersList() {
-            try {
-                const list = await getAllGroupMembers(groupID);
-
-                setGroupMembersList(list)
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-            }
-        }
-        fetchGroupMembersList();
-    }, [])
-
-
-    return (
-        <ScrollView>
-            <View style={{ alignItems: 'center', marginTop: 20 }}>
-                <Text style={styles.headerText}>Owner</Text>
-
-                <GroupOwnerEmail groupMembersList={groupMembersList} />
-
-                <Text style={styles.headerText}>Members</Text>
-                <GroupMembersEmail groupMembersList={groupMembersList} groupID={groupID} />
-
-            </View>
-        </ScrollView>
-    )
-}
-
-export default EZGroupMembersList;
-
 const styles = StyleSheet.create({
-    headerRow: {
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 10,
-        marginTop: 10,
-        borderBottomWidth: 2
-    },
-    headerText: {
-        fontSize: 25,
-        marginTop: 20
-    },
 
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 10,
-    },
     emailText: {
         fontSize: 20,
         marginTop: 10
 
     },
-})
+    userNameEmailTitle: {
+        fontSize: 20
+    },
+    usernameContainer: {
+        flex: 0.4,
+        alignItems: 'center'
+    },
+    emailContainer: {
+        flex: 0.6,
+        alignItems: 'center'
+    }
+
+}
+)
+
+
+

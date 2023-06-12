@@ -37,9 +37,13 @@ const AddExpense = () => {
 
   const onSubmit = async () => {
     if (name === '' || cost === '') {
+      alert("Please fill in both name and cost.")
       return;
     }
-
+    if (parseFloat(cost) < 0) {
+      alert("Cost cannot be negative.")
+      return;
+    }
     const expense = {
       id: uuid.v4(),
       name: name,
