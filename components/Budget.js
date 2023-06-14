@@ -13,9 +13,13 @@ const Budget = () => {
 		setIsEditing(true);
 	};
   const handleSave = (value) => {
+    if (value  === "") {
+      alert("Please enter a budget.")
+      return;
+    }
     let newBudget = parseFloat(value)
     if (newBudget < 0) {
-      alert("Cost cannot be negative.")
+      alert("Budget cannot be negative.")
       return;
     }
     dispatch({

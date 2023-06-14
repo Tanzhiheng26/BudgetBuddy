@@ -30,17 +30,12 @@ const ProfileScreen = () => {
             }
         }
         fetchUserInfo();
-
     }, [])
-
-
-
 
     return (
         <View style={styles.container}>
-
-            <Text>username: {userInfo.username}</Text>
-            <Text>email: {userInfo.email}</Text>
+            <Text style={styles.text}>Username: {userInfo.username}</Text>
+            <Text style={styles.text}>Email: {userInfo.email}</Text>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
@@ -62,7 +57,7 @@ const styles = StyleSheet.create({
 
     },
     buttonContainer: {
-        width: '60%',
+        width: '50%',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -75,11 +70,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center'
     },
-
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
     },
+    text: {
+        fontSize: 20
+    }
 
 })

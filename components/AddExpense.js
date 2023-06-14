@@ -29,9 +29,9 @@ const AddExpense = () => {
   //Category
   const [category, setCategory] = useState('');
   const data = [
-    { key: '1', value: 'Transport' },
-    { key: '2', value: 'Food' },
-    { key: '3', value: 'Others'}
+    { key: '1', value: 'Food' },
+    { key: '2', value: 'Transport' },
+    { key: '3', value: 'Others' }
   ]
 
 
