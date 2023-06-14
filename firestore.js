@@ -7,6 +7,8 @@ const USERS_COLLECTION = 'users'
 const ALLGROUPS_COLLECTION = 'allgroups'
 const GROUPS_COLLECTION = 'groups'
 const MEMBERS_COLLECTION = 'members'
+const GROUPEXPENSES_COLLECTION = 'groupexpenses'
+const PAYERS_COLLECTION = 'payer'
 
 export async function addExpense(uid, id, name, cost, date, category) {
     const userRef = collection(db, USERS_COLLECTION, uid, EXPENSES_COLLECTION)
@@ -72,6 +74,7 @@ export async function createGroup(uid, groupID, groupName, email, username) {
 }
 
 export async function addGroupMember(uid, groupID, groupName, email, username) {
+
     const membersRef = collection(db, ALLGROUPS_COLLECTION, groupID, MEMBERS_COLLECTION)
     setDoc(doc(membersRef, uid), { uid, role: 'member', email, username })
     const userRef = collection(db, USERS_COLLECTION, uid, GROUPS_COLLECTION)
@@ -161,10 +164,48 @@ export async function deleteGroup(groupID) {
     }
 }
 
-/*
-
-export asnyc function addGroupExpense(groupID, uid, id, name, cost, date, deadline, splitData)
+export async function addGroupExpense(groupID, uid, expenseID, name, username, cost, date, deadline, splitData) {
     const groupRef = collection(db, ALLGROUPS_COLLECTION, groupID, GROUPEXPENSES_COLLECTION)
-    setDoc(doc(groupRef, id), { uid, id, name, cost, date, deadline, splitDate });
-    //Do we need subcolletion? Maybe if we doing indivdual management like who paid...
-*/
+
+    setDoc(doc(groupRef, expenseID), { uid, expenseID, name, username, cost, date, deadline, splitData });
+    /*
+    for (const payer of splitData) {
+        const memberUID = payer.memberUID;
+        const memberCost = payer.memberCost;
+        const memberIfPaid = false;
+        const memberUsername = payer.memberUsername
+        const groupExpenseRef = collection(db, ALLGROUPS_COLLECTION, groupID, GROUPEXPENSES_COLLECTION, expenseID, PAYERS_COLLECTION)
+        setDoc(doc(groupExpenseRef, memberUID), { memberUID, memberCost, memberIfPaid, memberUsername })
+    }
+    */
+}
+
+export async function getAllGroupExpenses(groupID) {
+    const groupExpenses = collection(db, ALLGROUPS_COLLECTION, groupID, GROUPEXPENSES_COLLECTION);
+    const querySnapshot = await getDocs(groupExpenses);
+
+    let allExpenses = [];
+    for (const documentSnapshot of querySnapshot.docs) {
+        const expense = documentSnapshot.data();
+        allExpenses.push({
+            expenseID: expense.expenseID,
+            name: expense.name,
+            date: expense.date.toDate(),
+            deadline: expense.deadline.toDate(),
+            uid: expense.uid,
+            username: expense.username,
+            cost: expense.cost,
+            splitData: expense.splitData
+        })
+    }
+    return allExpenses;
+}
+
+export async function deleteGroupExpense(expensesID, groupID) {
+
+    deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID, GROUPEXPENSES_COLLECTION, expensesID));
+}
+
+
+
+

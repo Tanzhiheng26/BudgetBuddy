@@ -17,8 +17,8 @@ export const GroupOwner = ({ groupMembersList }) => {
     )
 }
 
-export const Header = ({ role }) => {
-    return (role === 'owner') ? (
+export const Header = ({ numberOfHeaders }) => {
+    return (numberOfHeaders === '2') ? (
         <View style={{ flexDirection: 'row', padding: 10 }}>
             <View style={styles.usernameContainer}>
                 <Text style={styles.userNameEmailTitle}>Username</Text>
@@ -41,7 +41,7 @@ export const Header = ({ role }) => {
 
 export const EmailItem = ({ member, groupID, handleDeleteMember }) => {
     return (
-        <View style={{ flexDirection: 'row', paddingRight: 10 }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
 
             <View style={{ flex: 0.4, alignItems: 'center' }}>
                 <Text style={styles.emailText}>{member.username}</Text>
@@ -58,11 +58,11 @@ export const EmailItem = ({ member, groupID, handleDeleteMember }) => {
 
 export const EmailItemNoDelete = ({ member }) => {
     return (
-        <View style={{ flexDirection: 'row', paddingRight: 10 }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
             <View style={{ flex: 0.4, alignItems: 'center' }}>
                 <Text style={styles.emailText}>{member.username}</Text>
             </View>
-            <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={styles.emailText}>{member.email}</Text>
             </View>
         </View>
@@ -82,7 +82,7 @@ export function emailList({ groupMembers }, { groupID }, handleDeleteMember) {
     if (groupMembers.length === 0) {
         list.push(<NoMemberAdded key={'0'} />)
     } else {
-        list.push(<Header key={'0'} role='member' />)
+        list.push(<Header key={'0'} numberOfHeaders='3' />)
         for (let i = 0; i < groupMembers.length; i++) {
             list.push(<EmailItem key={groupMembers[i].email} member={groupMembers[i]} groupID={groupID} handleDeleteMember={handleDeleteMember} />)
         }
@@ -95,7 +95,7 @@ export function emailListNoDelete({ groupMembers }) {
     if (groupMembers.length === 0) {
         list.push(<NoMemberAdded key={'0'} />)
     } else {
-        list.push(<Header key={'0'} role='member' />)
+        list.push(<Header key={'0'} numberOfHeaders='2' />)
         for (let i = 0; i < groupMembers.length; i++) {
             list.push(<EmailItemNoDelete key={groupMembers[i].email} member={groupMembers[i]} />)
         }
@@ -108,8 +108,8 @@ export const GroupMembers = ({ groupMembersList, groupID, isOwner, handleDeleteM
     return (
         <View>
             {isOwner
-            ? emailList({ groupMembers }, { groupID }, handleDeleteMember)
-            : emailListNoDelete({ groupMembers})}
+                ? emailList({ groupMembers }, { groupID }, handleDeleteMember)
+                : emailListNoDelete({ groupMembers })}
         </View>
     )
 }

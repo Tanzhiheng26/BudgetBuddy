@@ -5,38 +5,42 @@ import { Icon } from '@rneui/themed';
 import { auth } from '../../firebase'
 
 
-const EZGroupExpenseItem = ({ id, uid, name, cost, date, deadline }) => {
+const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, splitData }) => {
 
+    function getCostDisplay() {
+        let total = 0;
+        if (auth.currentUser.uid === uid) {
 
-    function dataManager() {
-
-        list = []
-        for (let [key, value] of splitData) {
-            list.push(() => {
-                return (
-                    <View>
-                        <Text>
-                            {key} owe ${value}
-                        </Text>
-                    </View>)
+            for (const indivCost of splitData.filter((ele) => ele.memberUID !== uid)) {
+                total += parseFloat(indivCost.memberCost)
             }
-            )
-        } return list
+            return total;
+        } else {
+            return parseFloat(splitData.filter((ele) => ele.memberUID === uid)[0].memberCost)
+        }
+
     }
+    const CostDisplay = () => {
+        return (auth.currentUser.uid === uid) ? (
+            <Text style={styles.text}>You lent ${getCostDisplay()}</Text>
+        ) : (
+            <Text style={styles.text}>You borrowed ${getCostDisplay()}</Text>
+        )
+    }
+
 
 
     return (
         <View>
             <View style={styles.row}>
-                <View style={{ flex: 5, marginLeft: 20 }}>
+                <View style={{ flex: 0.5, marginLeft: 20 }}>
                     <Text style={styles.text}>{name} </Text>
-
-
-                    <Text style={styles.text}>{uid} paid ${cost}</Text>
+                    <Text style={styles.text}>{username} paid ${cost}</Text>
                 </View>
 
-                <View style={{ flex: 3, justifyContent: 'center' }}>
+                <View style={{ flex: 0.5 }}>
                     <Text style={styles.text}>{deadline}</Text>
+                    <CostDisplay />
                 </View>
 
             </View>

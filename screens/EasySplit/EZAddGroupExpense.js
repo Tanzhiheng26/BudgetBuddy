@@ -1,19 +1,51 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { getAllGroupMembers, addGroupExpense } from '../../firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { auth } from '../../firebase';
+import uuid from 'react-native-uuid';
 
 
+function createInputList(groupMembersList, handleDataChange, handleDataValue) {
+    let list = [];
+    for (let i = 0; i < groupMembersList.length; i++) {
+        list.push(<InputItem key={groupMembersList[i].uid}
+            memberUsername={groupMembersList[i].username}
+            memberUID={groupMembersList[i].uid}
+            handleDataChange={handleDataChange}
+            handleDataValue={handleDataValue}
+        />)
+    }
+    return list;
+}
+
+const InputItem = ({ memberUID, memberUsername, handleDataChange, handleDataValue }) => {
+    return (
+        < View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 0.70, paddingLeft: 80 }}>
+                <Text style={{ fontSize: 18 }}>{memberUsername}: </Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text>$: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(cost) => handleDataChange(cost, memberUID)}
+                    value={handleDataValue(memberUID)}
+                    placeholder="0.00"
+                    keyboardType="numeric"
+                /></View>
+        </View >)
+}
 
 const EZAddGroupExpense = ({ groupID }) => {
-
-
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
     const [date, setDate] = useState(new Date());
     const [deadline, setDeadline] = useState(new Date());
     const [show, setShow] = useState(false);
     const [showDeadline, setShowDeadline] = useState(false);
+    const [groupMembersList, setGroupMembersList] = useState([]);
+    const [splitData, setSplitData] = useState([])
 
     //Date
     const onChange = (event, selectedDate) => {
@@ -27,7 +59,6 @@ const EZAddGroupExpense = ({ groupID }) => {
         const currentDeadline = selectedDeadline;
         setShowDeadline(false);
         setDeadline(currentDeadline);
-
     };
 
     const showDatepicker = () => {
@@ -37,66 +68,136 @@ const EZAddGroupExpense = ({ groupID }) => {
         setShowDeadline(true);
     };
 
-
-
     const onSubmit = async () => {
-        setName('')
-        setCost('')
-        setDate(new Date())
+        if (isNaN(parseFloat(cost)) || cost === '' || parseFloat(cost) < 0) {
+            alert('Please enter a valid cost');
+        } else if (name === '') {
+            alert('Please enter an expense name');
+        } else if (splitData.map(ele => parseFloat(ele.memberCost)).filter(ele => isNaN(ele)).length !== 0) {
+            alert('Please enter a valid individual cost \n(enter 0 if input meant to be empty)');
+        } else {
+            const expenseID = uuid.v4()
+            const username = groupMembersList.filter((ele) => auth.currentUser.uid === ele.uid)[0].username
+            addGroupExpense(groupID, auth.currentUser.uid, expenseID, name, username, cost, date, deadline, splitData)
+            setName('')
+            setCost('')
+            setDate(new Date())
+        }
+    }
+
+
+    const onSplitEqually = () => {
+        if (isNaN(parseFloat(cost)) || cost === '' || parseFloat(cost) < 0) {
+            alert('Please enter a valid cost');
+        } else {
+            const splitCost = (parseFloat(cost) / groupMembersList.length).toFixed(2);
+            setSplitData(splitData.map(obj => { return { ...obj, memberCost: splitCost } }));
+
+        }
+    }
+
+
+    useEffect(() => {
+        function createInitialStateData(memberList) {
+            let list = []
+            for (let i = 0; i < memberList.length; i++) {
+                list.push({ memberUID: memberList[i].uid, memberUsername: memberList[i].username, memberCost: '' })
+            }
+            return list;
+        }
+        async function fetchGroupInfo() {
+            try {
+                const list = await getAllGroupMembers(groupID);
+                setGroupMembersList(list.sort((a, b) => b.role.localeCompare(a.role)))
+                setSplitData(createInitialStateData(list))
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            }
+        }
+        fetchGroupInfo();
+    }, [])
+
+
+    function handleDataChange(cost, memberUID) {
+        setSplitData(splitData.map(obj => (obj.memberUID === memberUID) ? { ...obj, memberCost: cost } : obj));
+    }
+
+    function handleDataValue(memberUID) {
+        if (splitData.length === 0) { return '' } else {
+            return splitData.filter(obj => (obj.memberUID === memberUID))[0].memberCost
+        }
     }
 
 
     return (
-        <KeyboardAvoidingView style={styles.container}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setName}
-                    value={name}
-                    placeholder="Name"
-                />
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setCost}
-                    value={cost}
-                    placeholder="Cost"
-                    keyboardType="numeric"
-                />
-                <TouchableOpacity
-                    style={styles.input}
-                    onPress={showDatepicker}>
-                    <Text>{'Date: ' + date.toLocaleDateString()}</Text>
-                </TouchableOpacity>
-                {show && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode='date'
-                        onChange={onChange}
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setName}
+                        value={name}
+                        placeholder="Name"
                     />
-                )}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setCost}
+                        value={cost}
+                        placeholder="Cost"
+                        keyboardType="numeric"
+                    />
+                    <TouchableOpacity
+                        style={styles.input}
+                        onPress={showDatepicker}>
+                        <Text>{'Date: ' + date.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
+                    {show && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode='date'
+                            onChange={onChange}
+                        />
+                    )}
 
-                <TouchableOpacity
-                    style={styles.input}
-                    onPress={showDatepickerDeadline}>
-                    <Text>{'Deadline: ' + deadline.toLocaleDateString()}</Text>
-                </TouchableOpacity>
-                {showDeadline && (
-                    <DateTimePicker
-                        testID="dateTimePickerDeadline"
-                        value={deadline}
-                        mode='date'
-                        onChange={onChangeDeadline}
-                    />
-                )}
+                    <TouchableOpacity
+                        style={styles.input}
+                        onPress={showDatepickerDeadline}>
+                        <Text>{'Deadline: ' + deadline.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
+                    {showDeadline && (
+                        <DateTimePicker
+                            testID="dateTimePickerDeadline"
+                            value={deadline}
+                            mode='date'
+                            onChange={onChangeDeadline}
+                        />
+                    )}
+                </View>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={onSubmit}
-            >
-                <Text style={styles.buttonText}>Add Expense</Text>
-            </TouchableOpacity>
-        </KeyboardAvoidingView >
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                    style={styles.splitEquallybutton}
+                    onPress={onSplitEqually}
+                >
+                    <Text style={styles.splitEquallybuttonText}>Split Equally</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={{ paddingTop: 20 }}>
+
+                {createInputList(groupMembersList, handleDataChange, handleDataValue)}
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onSubmit}
+                >
+                    <Text style={styles.buttonText}>Add Expense</Text>
+                </TouchableOpacity>
+            </View>
+
+        </ScrollView >
 
     )
 }
@@ -108,6 +209,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: 50
     },
     inputContainer: {
         width: '60%',
@@ -119,6 +221,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 5,
     },
+    buttonContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 100
+    },
     button: {
         backgroundColor: '#0782F9',
         width: '40%',
@@ -127,9 +234,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20
     },
+    splitEquallybutton: {
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 2,
+        width: 100,
+        height: 30,
+        marginLeft: 10,
+        borderRadius: 10,
+        marginTop: 10
+    },
+    splitEquallybuttonText: {
+        fontWeight: '500',
+        fontSize: 16
+    },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
     },
+
 })

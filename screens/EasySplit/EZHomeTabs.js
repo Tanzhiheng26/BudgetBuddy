@@ -14,7 +14,7 @@ export default function EZHomeTabs() {
     <Stack.Navigator>
       <Stack.Screen options={{ headerShown: false }} name="EZHomeScreen" component={EZHomeScreen} />
       <Stack.Screen name="Add New Group" component={EZAddGroupScreen} />
-      <Stack.Screen name="Group Page Drawer" component={EZGroupPageDrawer} />
+      <Stack.Screen options={{ headerShown: false }} name="Group Page Drawer" component={EZGroupPageDrawer} />
     </Stack.Navigator>
 
   );

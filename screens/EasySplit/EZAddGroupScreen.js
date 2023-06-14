@@ -31,8 +31,6 @@ const EZAddGroupScreen = () => {
             return;
         }
 
-
-
         groupID = uuid.v4()
         createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email, ownerUserName);
         setGroupName('')

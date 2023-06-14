@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text } from 'react-native'
 import React, { useContext } from 'react'
 
+
 import EZGroupExpenseItem from './EZGroupExpenseItem'
 
 
@@ -23,11 +24,11 @@ const NoGroupExpenseView = () => {
 const ListTitle = ({ title1, title2 }) => {
     return (
         <View style={styles.row} >
-            <View style={{ flex: 5, marginLeft: 20 }}>
+            <View style={{ flex: 0.5, marginLeft: 20 }}>
                 <Text style={styles.text}>{title1} </Text>
             </View>
 
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 0.5 }}>
                 <Text style={styles.text}>{title2}</Text>
             </View>
         </View>
@@ -35,22 +36,20 @@ const ListTitle = ({ title1, title2 }) => {
     )
 }
 
-const EZGroupExpenseList = () => {
+const EZGroupExpenseList = ({ groupExpenses }) => {
 
-    const groupExpenseList = [{
-        id: 'expenseid123', uid: 'payerid123', name: 'food', cost: 100,
-        date: new Date("2022-03-25"), deadline: new Date("2022-03-25"), splitData: { 'uid123': 50, 'uid321': 50 }
-    }]
 
-    function createGroupExpenseItem(id, uid, name, cost, date, deadline) {
+    function createGroupExpenseItem(expense) {
 
-        return <EZGroupExpenseItem key={id}
-            id={id}
-            uid={uid}
-            name={name}
-            cost={cost}
-            date={date.toLocaleDateString()}
-            deadline={deadline.toLocaleDateString()}
+        return <EZGroupExpenseItem key={expense.expenseID}
+            id={expense.expenseID}
+            uid={expense.uid}
+            name={expense.name}
+            username={expense.username}
+            cost={expense.cost}
+            date={expense.date.toLocaleDateString()}
+            deadline={expense.deadline.toLocaleDateString()}
+            splitData={expense.splitData}
 
         />
     }
@@ -59,19 +58,18 @@ const EZGroupExpenseList = () => {
 
     function groupByDate() {
 
-        groupExpenseList.sort((a, b) => b.date - a.date)
-        let groupExLength = groupExpenseList.length;
+        groupExpenses.sort((a, b) => b.date - a.date)
+        let groupExLength = groupExpenses.length;
         let list = [];
         if (groupExLength != 0) {
             for (let i = 0; i < groupExLength; i++) {
-                let expense = groupExpenseList[i]
+                let expense = groupExpenses[i]
                 //check if the date is the same as previous
-                if (i == 0 || expense.date.toLocaleDateString() != groupExpenseList[i - 1].date.toLocaleDateString()) {
+                if (i == 0 || expense.date.toLocaleDateString() != groupExpenses[i - 1].date.toLocaleDateString()) {
                     list.push(<ViewGroupHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
                 }
 
-                list.push(createGroupExpenseItem(expense.id, expense.uid, expense.name, expense.cost, expense.date, expense.deadline
-                ))
+                list.push(createGroupExpenseItem(expense))
             }
         } else (
             list.push(<NoGroupExpenseView key="0" />)

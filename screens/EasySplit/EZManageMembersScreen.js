@@ -64,20 +64,21 @@ const EZManageMembersScreen = ({ groupID }) => {
         if (groupMemberEmail === auth.currentUser.email) {
             alert('You cannot enter your own email');
             setGroupMemberEmail('')
-            return; 
+            return;
         }
         try {
             const result = await fetchUIDAndUsernameFromEmail();
             if (result.uid === undefined) {
-                alert('Please enter a valid email')   
+
             } else {
                 await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
                 setRefresh(!refresh);
             }
             setGroupMemberEmail('')
         } catch (error) {
-            console.error(error)         
-        } 
+            console.error(error)
+            alert('Please enter a valid email')
+        }
     }
 
     return (
@@ -88,40 +89,42 @@ const EZManageMembersScreen = ({ groupID }) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Owner</Text>
                     </View>
-                    <Header role='owner' />
+                    <Header role='owner' numberOfHeaders={'2'} />
 
                     <GroupOwner groupMembersList={groupMembersList} />
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Members</Text>
                     </View>
-                    {isOwner() 
-                    ? 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={setGroupMemberEmail}
-                            value={groupMemberEmail}
-                            placeholder={"Add Group Member's Email"}
-                        />
-                        <View style={{ padding: 10 }}>
-                            <Icon type='antdesign' name='adduser' onPress={onSubmit} />
+                    {isOwner()
+                        ?
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={setGroupMemberEmail}
+                                value={groupMemberEmail}
+                                placeholder={"Add Group Member's Email"}
+                            />
+                            <View style={{ padding: 10 }}>
+                                <Icon type='antdesign' name='adduser' onPress={onSubmit} />
+                            </View>
                         </View>
-                    </View>
-                    : <></>
+                        : <></>
                     }
-                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} isOwner ={isOwner()} handleDeleteMember={handleDeleteMember} />
+                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} isOwner={isOwner()} handleDeleteMember={handleDeleteMember} />
                 </View >
 
                 <View style={{ alignItems: 'center' }} >
                     {isOwner() ?
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onDeleteGroup}
-                    >
-                        <Text style={styles.buttonText}>Delete Group</Text>
-                    </TouchableOpacity>
-                    : <></>
-                    }       
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={onDeleteGroup}
+                        >
+                            <Text style={styles.buttonText}>Delete Group</Text>
+                        </TouchableOpacity>
+                        :
+                        //can add leave group button for members here
+                        <></>
+                    }
                 </View>
             </ScrollView >
         </View>
