@@ -9,21 +9,19 @@ import uuid from 'react-native-uuid';
 
 const EZAddGroupScreen = () => {
     [groupName, setGroupName] = useState('');
-    [ownerUserName, setOwnerUserName] = useState('')
+
 
     const navigation = useNavigation();
 
 
     async function fetchUsernameFromEmail() {
         try {
-            const uid = await emailToUserName(auth.currentUser.email);
-            setOwnerUserName(uid)
+            const username = await emailToUserName(auth.currentUser.email);
+            return username;
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
     }
-
-    fetchUsernameFromEmail();
 
 
     const onSubmit = async () => {
@@ -31,9 +29,9 @@ const EZAddGroupScreen = () => {
             alert("Please fill in a group name.")
             return;
         }
-
+        const result = await fetchUsernameFromEmail();
         groupID = uuid.v4()
-        createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email, ownerUserName);
+        createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email, result);
         setGroupName('')
         navigation.replace('EZHomeScreen')
 
