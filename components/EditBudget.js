@@ -15,7 +15,7 @@ const EditBudget = ({ budget, handleSave }) => {
         placeholder="New Budget"
         keyboardType="numeric"
       />
-      <Icon name='check' onPress={() => handleSave(value)} style={styles.icon} />
+      <Icon name='check' onPress={() => handleSave(value)}  size={24} style={styles.icon} />
     </View>
   )
 }
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   text: {
-    fontSize: 15,
-    fontWeight: 600
+    fontSize: 20,
   }
 })

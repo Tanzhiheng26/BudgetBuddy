@@ -6,7 +6,7 @@ const ViewBudget = ({ budget, handleEdit }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Budget: ${budget}</Text>
-      <Icon name='edit' onPress={handleEdit} style={styles.icon} />
+      <Icon name='edit' onPress={handleEdit} size={24} style={styles.icon} />
     </View>
   )
 }
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   text: {
-    fontSize: 15,
-    fontWeight: 600
+    fontSize: 20,
   }
 })

@@ -30,8 +30,20 @@ const BudgetScreen = () => {
         return Math.round((totalExpenses / budget) * 100);
     }
 
+    function barColor(percentage) {
+        if (percentage >= 100) {
+            return "#E74C3C"
+        } else if (percentage >= 75) {
+            return "#FFA500" 
+        } else if (percentage >= 50) {
+            return "#FFFF00"
+        } else {
+            return "#8BED4F"
+        }
+    }
+
     const width = getPercentage() > 100 ? "100%" : getPercentage() + "%";
-    const backgroundColor =  getPercentage() > 100 ? "#E74C3C" :"#8BED4F";
+    const backgroundColor =  barColor(getPercentage())
     return (
     <View>
         <View style={styles.budgetcontainer}>
@@ -49,9 +61,9 @@ const BudgetScreen = () => {
 
         <View style={styles.barContainer}>
             <View style={styles.progressBar}>
-                <Animated.View style={[StyleSheet.absoluteFill, {backgroundColor, width }]}/>
+                <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor, width }]}/>
             </View> 
-            <Text>{getPercentage()}% of budget spent</Text>
+            <Text style={styles.text}>{getPercentage()}% of budget spent</Text>
         </View>
     </View>
   )
@@ -77,30 +89,19 @@ const styles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
         backgroundColor: '#ecf0f1',
         padding: 8,
+        marginTop: 20,
     },
     progressBar: {
-        height: 20,
+        height: 30,
         width: '100%',
         backgroundColor: 'white',
         borderColor: '#000',
         borderWidth: 2,
         borderRadius: 5
     },
-    buttoncontainer: {
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#0782F9',
-        width: '60%',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 40,
-        marginBottom: 30
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-    },
+    text: {
+        fontSize: 20,
+        fontWeight: 500,
+        marginTop: 10
+    }
 })
