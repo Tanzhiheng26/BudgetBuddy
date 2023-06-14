@@ -28,6 +28,7 @@ const EZAddGroupScreen = () => {
 
     const onSubmit = async () => {
         if (groupName === '') {
+            alert("Please fill in a group name.")
             return;
         }
 
