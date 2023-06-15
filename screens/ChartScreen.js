@@ -60,7 +60,7 @@ const ChartScreen = () => {
       labels: monthlyData.map(x => x.month),
       datasets: [
         {
-          data: monthlyData.map(x => x.totalCost)
+          data: monthlyData.map(x => parseFloat(x.totalCost.toFixed(2)))
         }
       ]
     };

@@ -5,7 +5,7 @@ import { Icon } from '@rneui/themed';
 const ViewBudget = ({ budget, handleEdit }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Budget: ${budget}</Text>
+      <Text style={styles.text}>Budget: ${budget.toFixed(2)}</Text>
       <Icon name='edit' onPress={handleEdit} size={24} style={styles.icon} />
     </View>
   )

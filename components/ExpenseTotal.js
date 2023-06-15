@@ -10,7 +10,7 @@ const ExpenseTotal = () => {
       .reduce((total, item) => { return total + item.cost }, 0)
   return (
     <View style={styles.container}>
-      <Text style={styles.text} >Spent so far: ${totalExpenses}</Text>
+      <Text style={styles.text} >Spent so far: ${totalExpenses.toFixed(2)}</Text>
     </View>
   )
 }
