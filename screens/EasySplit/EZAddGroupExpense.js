@@ -69,16 +69,20 @@ const EZAddGroupExpense = ({ groupID }) => {
     };
 
     const onSubmit = async () => {
-        if (isNaN(parseFloat(cost)) || cost === '' || parseFloat(cost) < 0) {
+        const totalCost = parseFloat(cost)
+        if (isNaN(totalCost) || cost === '' || totalCost < 0) {
             alert('Please enter a valid cost');
         } else if (name === '') {
             alert('Please enter an expense name');
         } else if (splitData.map(ele => parseFloat(ele.memberCost)).filter(ele => isNaN(ele)).length !== 0) {
             alert('Please enter a valid individual cost \n(enter 0 if input meant to be empty)');
+        } else if (splitData.reduce((x, y) => parseFloat(x.memberCost) + parseFloat(y.memberCost) !== totalCost)) {
+            const sum = splitData.reduce((x, y) => parseFloat(x.memberCost) + parseFloat(y.memberCost))
+            alert(`Sum of individual costs ($${sum}) ≠ total cost ($${totalCost})`);
         } else {
             const expenseID = uuid.v4()
             const username = groupMembersList.filter((ele) => auth.currentUser.uid === ele.uid)[0].username
-            addGroupExpense(groupID, auth.currentUser.uid, expenseID, name, username, cost, date, deadline, splitData)
+            addGroupExpense(groupID, auth.currentUser.uid, expenseID, name, username, totalCost, date, deadline, splitData)
             setName('')
             setCost('')
             setDate(new Date())
@@ -87,12 +91,12 @@ const EZAddGroupExpense = ({ groupID }) => {
 
 
     const onSplitEqually = () => {
-        if (isNaN(parseFloat(cost)) || cost === '' || parseFloat(cost) < 0) {
+        const totalCost = parseFloat(cost)
+        if (isNaN(totalCost) || cost === '' || totalCost < 0) {
             alert('Please enter a valid cost');
         } else {
-            const splitCost = (parseFloat(cost) / groupMembersList.length).toFixed(2);
+            const splitCost = (totalCost / groupMembersList.length).toFixed(2);
             setSplitData(splitData.map(obj => { return { ...obj, memberCost: splitCost } }));
-
         }
     }
 
@@ -175,7 +179,7 @@ const EZAddGroupExpense = ({ groupID }) => {
                     )}
                 </View>
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
                 <TouchableOpacity
                     style={styles.splitEquallybutton}
                     onPress={onSplitEqually}
@@ -183,7 +187,7 @@ const EZAddGroupExpense = ({ groupID }) => {
                     <Text style={styles.splitEquallybuttonText}>Split Equally</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{ paddingTop: 20 }}>
+            <View style={{ paddingTop: 10 }}>
 
                 {createInputList(groupMembersList, handleDataChange, handleDataValue)}
             </View>

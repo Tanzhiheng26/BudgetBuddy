@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { Header, GroupMembers, GroupOwner } from '../../components/EasySplit/EZGroupMembersList';
 import { auth } from '../../firebase';
@@ -21,10 +21,24 @@ const EZManageMembersScreen = ({ groupID }) => {
         setRefresh(!refresh)
     }
 
-    const onDeleteGroup = async () => {
-        //need await so that screen replace only after groupdeleted
-        await deleteGroup(groupID)
-        navigation.replace('EZHomeScreen')
+    const onDeleteGroup = () => {
+        return Alert.alert(
+            "Confirm",
+            "Are you sure you want to remove this group?",
+            [
+              {
+                text: "Yes",
+                onPress: async () => {
+                    //need await so that screen replace only after groupdeleted
+                    await deleteGroup(groupID)
+                    navigation.replace('EZHomeScreen')
+                },
+              },
+              {
+                text: "No",
+              },
+            ]
+          ); 
     }
 
     useEffect(() => {
@@ -84,8 +98,7 @@ const EZManageMembersScreen = ({ groupID }) => {
     return (
         <View>
             <ScrollView >
-
-                <View style={{ marginTop: 20, marginBottom: 30, flex: 1 }}>
+                <View style={{ marginBottom: 20, flex: 1 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Owner</Text>
                     </View>
@@ -97,7 +110,7 @@ const EZManageMembersScreen = ({ groupID }) => {
                     </View>
                     {isOwner()
                         ?
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={styles.addContainer}>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setGroupMemberEmail}
@@ -134,17 +147,15 @@ const EZManageMembersScreen = ({ groupID }) => {
 export default EZManageMembersScreen;
 
 const styles = StyleSheet.create({
-    container: {
-    },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
     },
-
     headerText: {
         fontSize: 25,
-        marginTop: 20
+        marginTop: 20,
+        textDecorationLine: 'underline'
     },
     input: {
         backgroundColor: 'white',
@@ -155,7 +166,6 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#0782F9',
-
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -166,5 +176,12 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16
     },
+    addContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: 10,
+        marginLeft: 40
+    }
 }
 )

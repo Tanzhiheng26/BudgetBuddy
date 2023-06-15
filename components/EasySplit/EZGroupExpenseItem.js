@@ -16,7 +16,10 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
             }
             return total;
         } else {
-            return parseFloat(splitData.filter((ele) => ele.memberUID === uid)[0].memberCost)
+            const member = splitData.filter((ele) => ele.memberUID === auth.currentUser.uid)
+            return member.length === 0 
+                    ? 0 
+                    : parseFloat(member[0].memberCost)
         }
 
     }
@@ -33,12 +36,12 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
     return (
         <View>
             <View style={styles.row}>
-                <View style={{ flex: 0.5, marginLeft: 20 }}>
-                    <Text style={styles.text}>{name} </Text>
-                    <Text style={styles.text}>{username} paid ${cost}</Text>
+                <View style={{ flex: 1, marginLeft: 20 }}>
+                    <Text style={styles.text}>{name}: ${cost}</Text>
+                    <Text style={styles.text}>Paid by: {username}</Text>
                 </View>
 
-                <View style={{ flex: 0.5 }}>
+                <View style={{ flex: 1 }}>
                     <Text style={styles.text}>{deadline}</Text>
                     <CostDisplay />
                 </View>
@@ -55,7 +58,6 @@ export default EZGroupExpenseItem
 
 const styles = StyleSheet.create({
     row: {
-        flex: 1,
         flexDirection: 'row',
         marginBottom: 10
     },

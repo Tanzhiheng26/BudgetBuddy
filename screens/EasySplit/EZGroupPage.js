@@ -28,38 +28,24 @@ const EZGroupPage = ({ groupID }) => {
         fetchGroupInfo();
     }, [])
 
-
-
-    function isOwner() {
-        return (groupInfo.ownerUID == auth.currentUser.uid)
-    }
+    // function isOwner() {
+    //     return (groupInfo.ownerUID == auth.currentUser.uid)
+    // }
 
     return (
         <View>
             <ScrollView>
                 <View style={{ alignItems: 'center', marginTop: 20, flex: 1 }}>
-
-                    <Text style={{ fontSize: 20 }}>Group Name: {groupInfo.groupName}</Text>
-                    {(isOwner()) ? <Text style={{ fontSize: 20 }}>Role: Owner</Text> :
-                        <Text style={{ fontSize: 20 }}>Role: Member</Text>}
-
-
+                    <Text style={{ fontSize: 20, fontWeight: 600 }}>{groupInfo.groupName}</Text>
+                    {/* {(isOwner()) ? <Text style={{ fontSize: 20 }}>Role: Owner</Text> :
+                        <Text style={{ fontSize: 20 }}>Role: Member</Text>} */}
                 </View>
-
-                <View>
-                    <EZGroupExpenseList groupExpenses={groupExpenses} />
-                </View>
+                <EZGroupExpenseList groupExpenses={groupExpenses} />
             </ScrollView>
         </View>
-
-
-
     )
 }
 
 export default EZGroupPage;
 
-const styles = StyleSheet.create({
-
-}
-)
+const styles = StyleSheet.create({})

@@ -10,11 +10,11 @@ const CustomDrawer = (props) => {
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />
             </DrawerContentScrollView>
-            <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: '#ccc' }}>
+            <View style={{ padding: 10, borderTopWidth: 1, borderTopColor: '#ccc' }}>
                 <TouchableOpacity
                     style={{ padding: 10 }}
                     onPress={() => navigation.navigate("EZHomeScreen")}>
-                    <Text>Back To HOME</Text>
+                    <Text>Back to My Groups</Text>
                 </TouchableOpacity>
             </View>
         </View>

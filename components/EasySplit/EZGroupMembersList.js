@@ -115,14 +115,13 @@ export const GroupMembers = ({ groupMembersList, groupID, isOwner, handleDeleteM
 }
 
 const styles = StyleSheet.create({
-
     emailText: {
         fontSize: 20,
         marginTop: 10
-
     },
     userNameEmailTitle: {
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: 600
     },
     usernameContainer: {
         flex: 0.4,
@@ -132,7 +131,6 @@ const styles = StyleSheet.create({
         flex: 0.6,
         alignItems: 'center'
     }
-
 }
 )
 

@@ -24,11 +24,11 @@ const NoGroupExpenseView = () => {
 const ListTitle = ({ title1, title2 }) => {
     return (
         <View style={styles.row} >
-            <View style={{ flex: 0.5, marginLeft: 20 }}>
+            <View style={{ flex: 1, marginLeft: 20 }}>
                 <Text style={styles.text}>{title1} </Text>
             </View>
 
-            <View style={{ flex: 0.5 }}>
+            <View style={{ flex: 1 }}>
                 <Text style={styles.text}>{title2}</Text>
             </View>
         </View>
@@ -57,8 +57,11 @@ const EZGroupExpenseList = ({ groupExpenses }) => {
 
 
     function groupByDate() {
-
-        groupExpenses.sort((a, b) => b.date - a.date)
+        groupExpenses.sort((a, b) => {
+            a.date.setHours(0, 0, 0, 0)
+            b.date.setHours(0, 0, 0, 0)
+            return b.date - a.date == 0 ? a.deadline - b.deadline : b.date - a.date;
+        })
         let groupExLength = groupExpenses.length;
         let list = [];
         if (groupExLength != 0) {
@@ -79,7 +82,7 @@ const EZGroupExpenseList = ({ groupExpenses }) => {
 
     return (
         <View>
-            <ListTitle title1="Name/PaidBy" title2="Deadline" />
+            <ListTitle title1="Expense" title2="Deadline" />
             {groupByDate()}
         </View>
     )
@@ -110,6 +113,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
 })
