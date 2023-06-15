@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { Header, GroupMembers, GroupOwner } from '../../components/EasySplit/EZGroupMembersList';
 import { auth } from '../../firebase';
@@ -21,10 +21,24 @@ const EZManageMembersScreen = ({ groupID }) => {
         setRefresh(!refresh)
     }
 
-    const onDeleteGroup = async () => {
-        //need await so that screen replace only after groupdeleted
-        await deleteGroup(groupID)
-        navigation.replace('EZHomeScreen')
+    const onDeleteGroup = () => {
+        return Alert.alert(
+            "Confirm",
+            "Are you sure you want to remove this group?",
+            [
+              {
+                text: "Yes",
+                onPress: async () => {
+                    //need await so that screen replace only after groupdeleted
+                    await deleteGroup(groupID)
+                    navigation.replace('EZHomeScreen')
+                },
+              },
+              {
+                text: "No",
+              },
+            ]
+          ); 
     }
 
     useEffect(() => {
@@ -64,64 +78,66 @@ const EZManageMembersScreen = ({ groupID }) => {
         if (groupMemberEmail === auth.currentUser.email) {
             alert('You cannot enter your own email');
             setGroupMemberEmail('')
-            return; 
+            return;
         }
         try {
             const result = await fetchUIDAndUsernameFromEmail();
             if (result.uid === undefined) {
-                alert('Please enter a valid email')   
+
             } else {
                 await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
                 setRefresh(!refresh);
             }
             setGroupMemberEmail('')
         } catch (error) {
-            console.error(error)         
-        } 
+            console.error(error)
+            alert('Please enter a valid email')
+        }
     }
 
     return (
         <View>
             <ScrollView >
-
-                <View style={{ marginTop: 20, marginBottom: 30, flex: 1 }}>
+                <View style={{ marginBottom: 20, flex: 1 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Owner</Text>
                     </View>
-                    <Header role='owner' />
+                    <Header role='owner' numberOfHeaders={'2'} />
 
                     <GroupOwner groupMembersList={groupMembersList} />
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.headerText}>Members</Text>
                     </View>
-                    {isOwner() 
-                    ? 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={setGroupMemberEmail}
-                            value={groupMemberEmail}
-                            placeholder={"Add Group Member's Email"}
-                        />
-                        <View style={{ padding: 10 }}>
-                            <Icon type='antdesign' name='adduser' onPress={onSubmit} />
+                    {isOwner()
+                        ?
+                        <View style={styles.addContainer}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={setGroupMemberEmail}
+                                value={groupMemberEmail}
+                                placeholder={"Add Group Member's Email"}
+                            />
+                            <View style={{ padding: 10 }}>
+                                <Icon type='antdesign' name='adduser' onPress={onSubmit} />
+                            </View>
                         </View>
-                    </View>
-                    : <></>
+                        : <></>
                     }
-                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} isOwner ={isOwner()} handleDeleteMember={handleDeleteMember} />
+                    <GroupMembers groupMembersList={groupMembersList} groupID={groupID} isOwner={isOwner()} handleDeleteMember={handleDeleteMember} />
                 </View >
 
                 <View style={{ alignItems: 'center' }} >
                     {isOwner() ?
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onDeleteGroup}
-                    >
-                        <Text style={styles.buttonText}>Delete Group</Text>
-                    </TouchableOpacity>
-                    : <></>
-                    }       
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={onDeleteGroup}
+                        >
+                            <Text style={styles.buttonText}>Delete Group</Text>
+                        </TouchableOpacity>
+                        :
+                        //can add leave group button for members here
+                        <></>
+                    }
                 </View>
             </ScrollView >
         </View>
@@ -131,17 +147,15 @@ const EZManageMembersScreen = ({ groupID }) => {
 export default EZManageMembersScreen;
 
 const styles = StyleSheet.create({
-    container: {
-    },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
     },
-
     headerText: {
         fontSize: 25,
-        marginTop: 20
+        marginTop: 20,
+        textDecorationLine: 'underline'
     },
     input: {
         backgroundColor: 'white',
@@ -152,7 +166,6 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#0782F9',
-
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -163,5 +176,12 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16
     },
+    addContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: 10,
+        marginLeft: 40
+    }
 }
 )
