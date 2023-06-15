@@ -83,7 +83,6 @@ const EZManageMembersScreen = ({ groupID }) => {
         try {
             const result = await fetchUIDAndUsernameFromEmail();
             if (result.uid === undefined) {
-
             } else {
                 await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
                 setRefresh(!refresh);
