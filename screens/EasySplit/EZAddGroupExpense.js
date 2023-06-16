@@ -75,9 +75,9 @@ const EZAddGroupExpense = ({ groupID }) => {
         } else if (name === '') {
             alert('Please enter an expense name');
         } else if (splitData.map(ele => parseFloat(ele.memberCost)).filter(ele => isNaN(ele)).length !== 0) {
-            alert('Please enter a valid individual cost \n(enter 0 if input meant to be empty)');
-        } else if (splitData.reduce((total, mem) => total + parseFloat(mem.memberCost), 0) !== totalCost) {
-            const sum = splitData.reduce((total, mem) => total + parseFloat(mem.memberCost), 0)
+            alert('Please enter a valid individual cost \n(enter 0 if input is meant to be empty)');
+        } else if (parseFloat(splitData.reduce((total, mem) => total + parseFloat(mem.memberCost), 0).toFixed(2)) !== totalCost) {
+            const sum = parseFloat(splitData.reduce((total, mem) => total + parseFloat(mem.memberCost), 0).toFixed(2))
             alert(`Sum of individual costs ($${sum}) ≠ total cost ($${totalCost})`);
         } else {
             const expenseID = uuid.v4()
