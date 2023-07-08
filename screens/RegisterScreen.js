@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
@@ -47,9 +47,7 @@ const RegisterScreen = () => {
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : '0'}
-          keyboardVerticalOffset
         >
-
           <View style={styles.inputContainer}>
             <TextInput
               placeholder='Username'
@@ -86,8 +84,6 @@ const RegisterScreen = () => {
               <Text style={styles.buttonOutLineText}>Register</Text>
             </TouchableOpacity>
           </View>
-
-
         </KeyboardAvoidingView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -101,7 +97,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   inputContainer: {
     width: '80%',
