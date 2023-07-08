@@ -11,6 +11,12 @@ const EZGroupPage = ({ groupID }) => {
 
     const [groupInfo, setGroupInfo] = useState({})
     const [groupExpenses, setGroupExpenses] = useState([])
+    const [refresh, setRefresh] = useState(false)
+
+    const onRefresh = () => {
+        setRefresh(!refresh)
+    }
+
 
     useEffect(() => {
         async function fetchGroupInfo() {
@@ -18,7 +24,6 @@ const EZGroupPage = ({ groupID }) => {
                 const info = await getGroupInfo(groupID);
                 setGroupInfo(info);
                 const expenses = await getAllGroupExpenses(groupID);
-
                 setGroupExpenses(expenses)
 
             } catch (error) {
@@ -26,7 +31,7 @@ const EZGroupPage = ({ groupID }) => {
             }
         }
         fetchGroupInfo();
-    }, [])
+    }, [refresh])
 
     // function isOwner() {
     //     return (groupInfo.ownerUID == auth.currentUser.uid)
@@ -34,13 +39,13 @@ const EZGroupPage = ({ groupID }) => {
 
     return (
         <View>
-            <ScrollView>
+            <ScrollView >
                 <View style={{ alignItems: 'center', marginTop: 20, flex: 1 }}>
-                    <Text style={{ fontSize: 20, fontWeight: 600 }}>{groupInfo.groupName}</Text>
+                    <Text style={{ fontSize: 23, fontWeight: 600 }}>{groupInfo.groupName}</Text>
                     {/* {(isOwner()) ? <Text style={{ fontSize: 20 }}>Role: Owner</Text> :
                         <Text style={{ fontSize: 20 }}>Role: Member</Text>} */}
                 </View>
-                <EZGroupExpenseList groupExpenses={groupExpenses} />
+                <EZGroupExpenseList groupExpenses={groupExpenses} groupID={groupID} onRefresh={onRefresh} />
             </ScrollView>
         </View>
     )

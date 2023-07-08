@@ -202,7 +202,6 @@ export async function getAllGroupExpenses(groupID) {
 }
 
 export async function deleteGroupExpense(expensesID, groupID) {
-
     deleteDoc(doc(db, ALLGROUPS_COLLECTION, groupID, GROUPEXPENSES_COLLECTION, expensesID));
 }
 
