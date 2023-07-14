@@ -10,7 +10,6 @@ import { auth } from '../../firebase';
 const EZHomeScreen = () => {
     const isFocused = useIsFocused()
     const navigation = useNavigation();
-
     const [groupList, setGroupList] = useState([])
 
     useEffect(() => {
@@ -18,9 +17,7 @@ const EZHomeScreen = () => {
             async function fetchUserGroups() {
                 try {
                     const groups = await getGroups(auth.currentUser.uid);
-
                     setGroupList(groups);
-
                 } catch (error) {
                     console.error('Failed to fetch data:', error);
                 }
@@ -33,7 +30,6 @@ const EZHomeScreen = () => {
         <ScrollView>
             <View style={{ alignItems: 'center', marginTop: 20, flex: 1 }}>
                 <Text style={{ fontSize: 25 }}>My Groups</Text>
-
                 <EZGroupList groupList={groupList} />
                 <View>
                     <TouchableOpacity
@@ -52,7 +48,6 @@ export default EZHomeScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
     },
     addGroupButton: {
         backgroundColor: '#white',
@@ -66,6 +61,4 @@ const styles = StyleSheet.create({
         marginBottom: 150,
         borderStyle: 'dotted'
     }
-
-}
-)
+})

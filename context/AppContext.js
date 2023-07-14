@@ -3,7 +3,6 @@ import React, { createContext, useReducer, useEffect } from 'react'
 import { getBudget, getExpense } from '../firestore'
 import { auth } from '../firebase'
 
-
 const AppReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_EXPENSE':

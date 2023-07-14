@@ -5,7 +5,6 @@ import { deleteExpense } from '../firestore';
 import { Icon } from '@rneui/themed';
 import { auth } from '../firebase'
 
-
 const ExpenseItem = ({ id, name, cost, date, category, orderBy }) => {
     const { dispatch } = useContext(AppContext);
     const handleDeleteExpense = () => {

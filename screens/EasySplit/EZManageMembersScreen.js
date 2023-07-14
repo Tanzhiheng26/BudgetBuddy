@@ -9,7 +9,6 @@ import { getAllGroupMembers, emailToID, emailToUserName, getGroupInfo, addGroupM
 
 const EZManageMembersScreen = ({ groupID }) => {
     const navigation = useNavigation();
-
     const [groupMembersList, setGroupMembersList] = useState([]);
     const [refresh, setRefresh] = useState(false)
     const [groupName, setGroupName] = useState('');
@@ -19,6 +18,11 @@ const EZManageMembersScreen = ({ groupID }) => {
     const handleDeleteMember = (uid, groupID) => {
         deleteMember(uid, groupID);
         setRefresh(!refresh)
+    }
+
+    const onLeaveGroup = async () => {
+        await deleteMember(auth.currentUser.uid, groupID)
+        navigation.replace('EZHomeScreen')
     }
 
     const onDeleteGroup = () => {
@@ -87,7 +91,6 @@ const EZManageMembersScreen = ({ groupID }) => {
             setRefresh(!refresh);
         }
         setGroupMemberEmail('')
-
     }
 
     return (
@@ -130,8 +133,12 @@ const EZManageMembersScreen = ({ groupID }) => {
                             <Text style={styles.buttonText}>Delete Group</Text>
                         </TouchableOpacity>
                         :
-                        //can add leave group button for members here
-                        <></>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={onLeaveGroup}
+                        >
+                            <Text style={styles.buttonText}>Leave Group</Text>
+                        </TouchableOpacity>
                     }
                 </View>
             </ScrollView >
@@ -179,5 +186,4 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginLeft: 40
     }
-}
-)
+})

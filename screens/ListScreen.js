@@ -5,7 +5,6 @@ import DatePicker from 'react-native-modern-datepicker';
 import { useNavigation } from '@react-navigation/native';
 
 const Expenses = () => {
-
     const [displayExpensesList, setDisplayExpensesList] = useState("Date");
     currDate = new Date();
     const [date, setDate] = useState(currDate.getFullYear() + " " + (currDate.getMonth() + 1));
@@ -36,7 +35,7 @@ const Expenses = () => {
     function getMonth(monthNumber) {
         const date = new Date();
         date.setMonth(monthNumber - 1);
-      
+        
         return date.toLocaleString([], {
           month: 'short',
         });

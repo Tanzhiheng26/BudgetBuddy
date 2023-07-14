@@ -2,7 +2,6 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import { Icon } from '@rneui/themed'
 
-
 const EditBudget = ({ budget, handleSave }) => {
   const [value, setValue] = useState(budget);
   return (

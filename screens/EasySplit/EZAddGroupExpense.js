@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { getAllGroupMembers, addGroupExpense } from '../../firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { auth } from '../../firebase';
 import uuid from 'react-native-uuid';
-
 
 function createInputList(groupMembersList, handleDataChange, handleDataValue) {
     let list = [];
@@ -89,7 +88,6 @@ const EZAddGroupExpense = ({ groupID }) => {
         }
     }
 
-
     const onSplitEqually = () => {
         const totalCost = parseFloat(cost)
         if (isNaN(totalCost) || cost === '' || totalCost < 0) {
@@ -102,7 +100,6 @@ const EZAddGroupExpense = ({ groupID }) => {
 
     const onCalculateTotalCost = () => {
         function getCost(obj) {
-
             if (obj.memberCost === '') {
                 return 0;
             }
@@ -113,8 +110,6 @@ const EZAddGroupExpense = ({ groupID }) => {
         setCost(String(splitData.reduce((accumulator, currentValue) => accumulator + getCost(currentValue),
             0,).toFixed(2)));
     }
-
-
 
     useEffect(() => {
         function createInitialStateData(memberList) {
@@ -147,7 +142,6 @@ const EZAddGroupExpense = ({ groupID }) => {
         }
     }
 
-
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -162,7 +156,7 @@ const EZAddGroupExpense = ({ groupID }) => {
                         style={styles.input}
                         onChangeText={setCost}
                         value={cost}
-                        placeholder="Cost"
+                        placeholder="Total Cost"
                         keyboardType="numeric"
                     />
                     <TouchableOpacity
@@ -178,7 +172,6 @@ const EZAddGroupExpense = ({ groupID }) => {
                             onChange={onChange}
                         />
                     )}
-
                     <TouchableOpacity
                         style={styles.input}
                         onPress={showDatepickerDeadline}>
@@ -209,10 +202,8 @@ const EZAddGroupExpense = ({ groupID }) => {
                 </TouchableOpacity>
             </View>
             <View style={{ paddingTop: 10 }}>
-
                 {createInputList(groupMembersList, handleDataChange, handleDataValue)}
             </View>
-
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
@@ -221,9 +212,7 @@ const EZAddGroupExpense = ({ groupID }) => {
                     <Text style={styles.buttonText}>Add Expense</Text>
                 </TouchableOpacity>
             </View>
-
         </ScrollView >
-
     )
 }
 
@@ -290,5 +279,4 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16
     },
-
 })

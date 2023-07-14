@@ -22,7 +22,5 @@ export default function EZGroupPageDrawer({ route }) {
             <Drawer.Screen name="Group Members ">
                 {() => <EZManageMembersScreen groupID={groupID} />}
             </Drawer.Screen>
-
-
         </Drawer.Navigator >)
 }

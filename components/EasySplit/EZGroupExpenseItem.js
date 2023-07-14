@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { auth } from '../../firebase'
 import { Modal } from './Modal';
 import { deleteGroupExpense } from '../../firestore';
-
 
 const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, splitData, groupID, onRefresh }) => {
 
@@ -28,13 +27,10 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
     }
 
     function getCostDisplay() {
-        let total = 0;
         if (auth.currentUser.uid === uid) {
-
-            for (const indivCost of splitData.filter((ele) => ele.memberUID !== uid)) {
-                total += parseFloat(indivCost.memberCost)
-            }
-            return total;
+            return splitData.filter((ele) => ele.memberUID !== uid).reduce(
+                (total, ele) => total + parseFloat(ele.memberCost), 0
+            )
         } else {
             const member = splitData.filter((ele) => ele.memberUID === auth.currentUser.uid)
             return member.length === 0
@@ -43,6 +39,7 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
         }
 
     }
+
     const CostDisplay = () => {
         return (auth.currentUser.uid === uid) ? (
             <Text style={styles.text}>You lent ${getCostDisplay()}</Text>
@@ -50,9 +47,6 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
             <Text style={styles.text}>You borrowed ${getCostDisplay()}</Text>
         )
     }
-
-
-
 
     const ModalDisplayItem = ({ indivUsername, indivCost }) => {
         return (
@@ -73,7 +67,6 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
         }
         return list;
     }
-
 
     return (
         <View style={{ paddingHorizontal: 10 }}>
@@ -109,12 +102,10 @@ const EZGroupExpenseItem = ({ id, uid, name, username, cost, date, deadline, spl
                         </View>
                         <View style={{ alignItems: "center", paddingTop: 20 }}>
                             {ModalDisplay()}
-
                         </View>
                     </Modal.Body>
                     <Modal.Footer style={{ flexDirection: 'row' }}>
                         <TouchableOpacity onPress={handleModal} style={styles.button}>
-
                             <Text>Back</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleDeleteGroupExpense} style={styles.button}>

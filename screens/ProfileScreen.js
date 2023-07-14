@@ -1,14 +1,12 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { getUserInfo } from '../firestore';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
-
     const [userInfo, setUserInfo] = useState(new Map());
     const [oldPassword, setoldPassword] = useState('');
     const [newPassword, setnewPassword] = useState('');
@@ -159,5 +157,4 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 10,
     },
-
 })

@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createGroup, emailToUserName } from '../../firestore';
 import { auth } from '../../firebase';
 import uuid from 'react-native-uuid';
 
-
-
 const EZAddGroupScreen = () => {
     [groupName, setGroupName] = useState('');
-
-
     const navigation = useNavigation();
-
 
     async function fetchUsernameFromEmail() {
         try {
@@ -22,7 +17,6 @@ const EZAddGroupScreen = () => {
             console.error('Failed to fetch data:', error);
         }
     }
-
 
     const onSubmit = async () => {
         if (groupName === '') {
@@ -34,10 +28,7 @@ const EZAddGroupScreen = () => {
         createGroup(auth.currentUser?.uid, groupID, groupName, auth.currentUser.email, result);
         setGroupName('')
         navigation.replace('EZHomeScreen')
-
-
     }
-
 
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -48,10 +39,7 @@ const EZAddGroupScreen = () => {
                     value={groupName}
                     placeholder="Group Name"
                 />
-
-
             </View>
-
             <TouchableOpacity
                 style={styles.button}
                 onPress={onSubmit}
@@ -59,7 +47,6 @@ const EZAddGroupScreen = () => {
                 <Text style={styles.buttonText}>Add Group</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
-
     )
 }
 
@@ -70,7 +57,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     inputContainer: {
         width: '60%',

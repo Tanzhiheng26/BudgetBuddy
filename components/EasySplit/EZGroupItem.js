@@ -1,20 +1,16 @@
 
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 const EZGroupItem = ({ groupName, groupID }) => {
     const navigation = useNavigation();
-
-
     return (
         <View style={{ alignItems: 'center', marginTop: 20 }}>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => navigation.navigate('Group Page Drawer', { groupID })}>
-
                 <Text style={styles.buttonText}>{groupName} </Text>
-
             </TouchableOpacity>
         </View >
     )
@@ -35,11 +31,9 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'black',
-
         fontSize: 20
     },
-}
-)
+})
 
 export default EZGroupItem;
 

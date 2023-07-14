@@ -1,9 +1,6 @@
 import { StyleSheet, View, Text } from 'react-native'
-import React, { useContext } from 'react'
-
-
+import React from 'react'
 import EZGroupExpenseItem from './EZGroupExpenseItem'
-
 
 const ViewGroupHeader = ({ title }) => {
     return (
@@ -37,10 +34,7 @@ const ListTitle = ({ title1, title2 }) => {
 }
 
 const EZGroupExpenseList = ({ groupExpenses, groupID, onRefresh }) => {
-
-
     function createGroupExpenseItem(expense) {
-
         return <EZGroupExpenseItem key={expense.expenseID}
             id={expense.expenseID}
             uid={expense.uid}
@@ -52,11 +46,8 @@ const EZGroupExpenseList = ({ groupExpenses, groupID, onRefresh }) => {
             splitData={expense.splitData}
             groupID={groupID}
             onRefresh={onRefresh}
-
         />
     }
-
-
 
     function groupByDate() {
         groupExpenses.sort((a, b) => {
@@ -88,7 +79,6 @@ const EZGroupExpenseList = ({ groupExpenses, groupID, onRefresh }) => {
             {groupByDate()}
         </View>
     )
-
 }
 
 export default EZGroupExpenseList
@@ -100,11 +90,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10,
         borderBottomWidth: 0,
-
     },
     headerText: {
         fontSize: 20,
-
     },
     noExpenseViewContainer: {
         alignItems: 'center',

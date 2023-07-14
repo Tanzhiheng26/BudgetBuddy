@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native'
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from '@rneui/themed';
 
 export const GroupOwner = ({ groupMembersList }) => {
@@ -42,7 +42,6 @@ export const Header = ({ numberOfHeaders }) => {
 export const EmailItem = ({ member, groupID, handleDeleteMember }) => {
     return (
         <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-
             <View style={{ flex: 0.4, alignItems: 'center' }}>
                 <Text style={styles.emailText}>{member.username}</Text>
             </View>
@@ -131,8 +130,7 @@ const styles = StyleSheet.create({
         flex: 0.6,
         alignItems: 'center'
     }
-}
-)
+})
 
 
 
