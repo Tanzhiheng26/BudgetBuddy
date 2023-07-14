@@ -14,7 +14,7 @@ const ViewGroupHeader = ({ title }) => {
 const NoExpenseView = () => {
   return (
     <View style={styles.noExpenseViewContainer}>
-      <Text style={{fontSize: 18}}>--No Expense Item Added--</Text>
+      <Text style={{ fontSize: 18 }}>--No Expense Item Added--</Text>
     </View >
   )
 }
@@ -22,13 +22,13 @@ const NoExpenseView = () => {
 const ListTitle = ({ title1, title2, title3 }) => {
   return (
     <View style={styles.row} >
-      <View style={{ flex: 3, marginLeft: 20 }}>
+      <View style={{ flex: 2.5, marginLeft: 20 }}>
         <Text style={styles.text}>{title1} </Text>
       </View>
-      <View style={{ flex: 3 }}>
+      <View style={{ flex: 2.5 }}>
         <Text style={styles.text}>{title2} </Text>
       </View>
-      <View style={{ flex: 2 }}>
+      <View style={{ flex: 3 }}>
         <Text style={styles.text}>{title3}</Text>
       </View>
     </View>
@@ -44,7 +44,7 @@ const ExpenseList = ({ orderBy, year, month }) => {
     return <ExpenseItem key={id}
       id={id}
       name={name}
-      cost={cost}
+      cost={cost.toFixed(2)}
       date={date.toLocaleDateString()}
       category={category}
       orderBy={orderBy} />
@@ -52,7 +52,7 @@ const ExpenseList = ({ orderBy, year, month }) => {
 
   function groupByCategory() {
     copy.sort((a, b) => {
-        return a.category.localeCompare(b.category) == 0 ? b.date - a.date : a.category.localeCompare(b.category)
+      return a.category.localeCompare(b.category) == 0 ? b.date - a.date : a.category.localeCompare(b.category)
     })
     let exLength = copy.length;
     let list = [];
@@ -86,7 +86,7 @@ const ExpenseList = ({ orderBy, year, month }) => {
         //check if the date is the same as previous
         if (i == 0 || expense.date.toLocaleDateString() != copy[i - 1].date.toLocaleDateString()) {
           list.push(<ViewGroupHeader key={expense.date.toLocaleDateString()} title={expense.date.toLocaleDateString()} />)
-        } 
+        }
         list.push(createExpenseItem(expense.id, expense.name, expense.cost, expense.date, expense.category, "Date"))
       }
     } else (
@@ -95,19 +95,19 @@ const ExpenseList = ({ orderBy, year, month }) => {
     return list;
   }
 
-  return orderBy == "Date" 
-  ? (
-    <View>
-      <ListTitle title1="Name" title2="Category" title3="Cost" />
-      {groupByDate()}
-    </View>
-  ) 
-  : (
-    <View>
-      <ListTitle title1="Name" title2="Date" title3="Cost" />
-      {groupByCategory()}
-    </View>
-  )
+  return orderBy == "Date"
+    ? (
+      <View>
+        <ListTitle title1="Name" title2="Category" title3="Cost" />
+        {groupByDate()}
+      </View>
+    )
+    : (
+      <View>
+        <ListTitle title1="Name" title2="Date" title3="Cost" />
+        {groupByCategory()}
+      </View>
+    )
 }
 
 export default ExpenseList
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
   },
   noExpenseViewContainer: {
     alignItems: 'center',

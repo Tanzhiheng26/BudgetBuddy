@@ -36,7 +36,7 @@ const ListTitle = ({ title1, title2 }) => {
     )
 }
 
-const EZGroupExpenseList = ({ groupExpenses }) => {
+const EZGroupExpenseList = ({ groupExpenses, groupID, onRefresh }) => {
 
 
     function createGroupExpenseItem(expense) {
@@ -50,6 +50,8 @@ const EZGroupExpenseList = ({ groupExpenses }) => {
             date={expense.date.toLocaleDateString()}
             deadline={expense.deadline.toLocaleDateString()}
             splitData={expense.splitData}
+            groupID={groupID}
+            onRefresh={onRefresh}
 
         />
     }
@@ -81,7 +83,7 @@ const EZGroupExpenseList = ({ groupExpenses }) => {
     }
 
     return (
-        <View>
+        <View style={{ paddingBottom: 100 }}>
             <ListTitle title1="Expense" title2="Deadline" />
             {groupByDate()}
         </View>
@@ -97,10 +99,12 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginBottom: 10,
         marginTop: 10,
-        borderBottomWidth: 2
+        borderBottomWidth: 0,
+
     },
     headerText: {
-        fontSize: 18
+        fontSize: 20,
+
     },
     noExpenseViewContainer: {
         alignItems: 'center',

@@ -17,13 +17,13 @@ const ExpenseItem = ({ id, name, cost, date, category, orderBy }) => {
     }
     return (orderBy == "Date") ? (
         <View style={styles.row}>
-            <View style={{ flex: 3, marginLeft: 20 }}>
+            <View style={{ flex: 2.5, marginLeft: 20 }}>
                 <Text style={styles.text}>{name} </Text>
             </View>
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 2.5 }}>
                 <Text style={styles.text}>{category} </Text>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 2 }}>
                 <Text style={styles.text}>${cost}</Text>
             </View>
             <View style={{ flex: 1 }}>
@@ -32,13 +32,13 @@ const ExpenseItem = ({ id, name, cost, date, category, orderBy }) => {
         </View>
     ) : (
         <View style={styles.row}>
-            <View style={{ flex: 3, marginLeft: 20 }}>
+            <View style={{ flex: 2.5, marginLeft: 20 }}>
                 <Text style={styles.text}>{name} </Text>
             </View>
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 2.5 }}>
                 <Text style={styles.text}>{date} </Text>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 2 }}>
                 <Text style={styles.text}>${cost}</Text>
             </View>
             <View style={{ flex: 1 }}>

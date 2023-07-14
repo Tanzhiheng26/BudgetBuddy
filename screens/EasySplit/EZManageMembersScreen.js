@@ -26,19 +26,18 @@ const EZManageMembersScreen = ({ groupID }) => {
             "Confirm",
             "Are you sure you want to remove this group?",
             [
-              {
-                text: "Yes",
-                onPress: async () => {
-                    //need await so that screen replace only after groupdeleted
-                    await deleteGroup(groupID)
-                    navigation.replace('EZHomeScreen')
+                {
+                    text: "Yes",
+                    onPress: async () => {
+                        await deleteGroup(groupID)
+                        navigation.replace('EZHomeScreen')
+                    },
                 },
-              },
-              {
-                text: "No",
-              },
+                {
+                    text: "No",
+                },
             ]
-          ); 
+        );
     }
 
     useEffect(() => {
@@ -80,18 +79,15 @@ const EZManageMembersScreen = ({ groupID }) => {
             setGroupMemberEmail('')
             return;
         }
-        try {
-            const result = await fetchUIDAndUsernameFromEmail();
-            if (result.uid === undefined) {
-            } else {
-                await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
-                setRefresh(!refresh);
-            }
-            setGroupMemberEmail('')
-        } catch (error) {
-            console.error(error)
-            alert('Please enter a valid email')
+        const result = await fetchUIDAndUsernameFromEmail();
+        if (result.uid === undefined) {
+            alert('Please enter a valid/registered email')
+        } else {
+            await addGroupMember(result.uid, groupID, groupName, groupMemberEmail, result.username);
+            setRefresh(!refresh);
         }
+        setGroupMemberEmail('')
+
     }
 
     return (
@@ -154,7 +150,8 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 25,
         marginTop: 20,
-        textDecorationLine: 'underline'
+        fontWeight: '500',
+
     },
     input: {
         backgroundColor: 'white',
@@ -176,9 +173,9 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     addContainer: {
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 10,
         marginLeft: 40
     }

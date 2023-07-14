@@ -10,9 +10,9 @@ import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
     }),
 });
 
@@ -25,18 +25,18 @@ const BudgetScreen = () => {
 
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-    
+
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-          setNotification(notification);
+            setNotification(notification);
         });
-    
+
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-          console.log(response);
+            console.log(response);
         });
-    
+
         return () => {
-          Notifications.removeNotificationSubscription(notificationListener.current);
-          Notifications.removeNotificationSubscription(responseListener.current);
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
         };
     }, []);
 
@@ -53,31 +53,31 @@ const BudgetScreen = () => {
         }
     }, [budget, expenses])
     const width = percentage > 100 ? "100%" : percentage + "%";
-    const backgroundColor =  barColor(percentage)
+    const backgroundColor = barColor(percentage)
 
     return (
-    <View>
-        <View style={styles.budgetcontainer}>
-            <Text style={styles.title}>{getMonthYear()}</Text>
-            <View style={styles.components}>
-                <Budget />
+        <View>
+            <View style={styles.budgetcontainer}>
+                <Text style={styles.title}>{getMonthYear()}</Text>
+                <View style={styles.components}>
+                    <Budget />
+                </View>
+                <View style={styles.components}>
+                    <ExpenseTotal />
+                </View>
+                <View style={styles.components}>
+                    <RemainingBudget />
+                </View>
             </View>
-            <View style={styles.components}>
-                <ExpenseTotal />
-            </View>
-            <View style={styles.components}>
-                <RemainingBudget />
-            </View>
-        </View>
 
-        <View style={styles.barContainer}>
-            <View style={styles.progressBar}>
-                <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor, width }]}/>
-            </View> 
-            <Text style={styles.text}>{percentage}% of budget spent</Text>
+            <View style={styles.barContainer}>
+                <View style={styles.progressBar}>
+                    <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor, width }]} />
+                </View>
+                <Text style={styles.text}>{percentage}% of budget spent</Text>
+            </View>
         </View>
-    </View>
-  )
+    )
 }
 
 export default BudgetScreen
@@ -85,8 +85,8 @@ export default BudgetScreen
 function getMonthYear() {
     const date = new Date();
     const month = date.toLocaleString([], {
-      month: 'short',
-      year
+        month: 'short',
+        year
     });
     const year = date.getFullYear();
     return month + " " + year;
@@ -106,7 +106,7 @@ function barColor(percentage) {
     if (percentage >= 100) {
         return "#E74C3C"
     } else if (percentage >= 75) {
-        return "#FFA500" 
+        return "#FFA500"
     } else if (percentage >= 50) {
         return "#FFFF00"
     } else {
@@ -116,43 +116,43 @@ function barColor(percentage) {
 
 async function schedulePushNotification() {
     await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Warning",
-        body: 'You have exceeded your budget',
-      },
-      trigger: null,
+        content: {
+            title: "Warning",
+            body: 'You have exceeded your budget',
+        },
+        trigger: null,
     });
 }
 
 async function registerForPushNotificationsAsync() {
     let token;
-  
+
     if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
     }
-  
+
     if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync()
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log(token);
     } else {
-      alert('Must use physical device for Push Notifications');
+        alert('Must use physical device for Push Notifications');
     }
-  
+
     return token;
 }
 

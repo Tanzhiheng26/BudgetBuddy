@@ -100,6 +100,21 @@ const EZAddGroupExpense = ({ groupID }) => {
         }
     }
 
+    const onCalculateTotalCost = () => {
+        function getCost(obj) {
+
+            if (obj.memberCost === '') {
+                return 0;
+            }
+            else {
+                return parseFloat(obj.memberCost);
+            }
+        }
+        setCost(String(splitData.reduce((accumulator, currentValue) => accumulator + getCost(currentValue),
+            0,).toFixed(2)));
+    }
+
+
 
     useEffect(() => {
         function createInitialStateData(memberList) {
@@ -179,12 +194,18 @@ const EZAddGroupExpense = ({ groupID }) => {
                     )}
                 </View>
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10, flexDirection: 'row' }}>
                 <TouchableOpacity
                     style={styles.splitEquallybutton}
                     onPress={onSplitEqually}
                 >
                     <Text style={styles.splitEquallybuttonText}>Split Equally</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.calculateTotalCostbutton}
+                    onPress={onCalculateTotalCost}
+                >
+                    <Text style={styles.splitEquallybuttonText}>Calculate Total Cost</Text>
                 </TouchableOpacity>
             </View>
             <View style={{ paddingTop: 10 }}>
@@ -245,6 +266,17 @@ const styles = StyleSheet.create({
         elevation: 2,
         width: 100,
         height: 30,
+        marginLeft: 10,
+        borderRadius: 10,
+        marginTop: 10
+    },
+    calculateTotalCostbutton: {
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 2,
+        width: 100,
+        height: 50,
         marginLeft: 10,
         borderRadius: 10,
         marginTop: 10
