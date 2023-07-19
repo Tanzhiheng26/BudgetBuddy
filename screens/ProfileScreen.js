@@ -31,15 +31,15 @@ const ProfileScreen = () => {
                 return;
             }
             updatePassword(user, newPassword)
-            .then(() => {
-                alert("Password updated")
-                setnewPassword('')
-                setoldPassword('')
-                setConfirmPassword('')
-            })
-            .catch(error => alert(error.message)) 
+                .then(() => {
+                    alert("Password updated")
+                    setnewPassword('')
+                    setoldPassword('')
+                    setConfirmPassword('')
+                })
+                .catch(error => alert(error.message))
         })
-        .catch(error => alert(error.message))
+            .catch(error => alert(error.message))
     }
 
     useEffect(() => {
@@ -56,53 +56,55 @@ const ProfileScreen = () => {
     }, [])
 
     return (
-        <View style={styles.container}>
-            <View style={styles.infoContainer}>
-                <Text style={styles.title}>User Info</Text>
-                <Text style={styles.text}>Username: {userInfo.username}</Text>
-                <Text style={styles.text}>Email: {userInfo.email}</Text>
-                <Text style={styles.title}>Update Password</Text>
-            </View>
+        <View style={{ flex: 1, marginTop: 30 }}>
+            <View style={{ flex: 0.9 }}>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.title}>User Info</Text>
+                    <Text style={styles.text}>Username: {userInfo.username}</Text>
+                    <Text style={styles.text}>Email: {userInfo.email}</Text>
+                    <Text style={styles.title}>Change Password</Text>
+                </View>
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='Current Password'
-                    value={oldPassword}
-                    onChangeText={text => setoldPassword(text)}
-                    style={styles.input}
-                    secureTextEntry={true}
-                />
-                <TextInput
-                    placeholder='New Password'
-                    value={newPassword}
-                    onChangeText={text => setnewPassword(text)}
-                    style={styles.input}
-                    secureTextEntry={true}
-                />
-                <TextInput
-                    placeholder='Confirm New Password'
-                    value={confirmPassword}
-                    onChangeText={text => setConfirmPassword(text)}
-                    style={styles.input}
-                    secureTextEntry={true}
-                />
-                <View style={{alignItems:'center'}}>
-                    <TouchableOpacity 
-                    style={styles.updateButton}
-                    onPress={changePassword}
-                    >
-                        <Text style={styles.updateText}>Update</Text>
-                    </TouchableOpacity>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder='Current Password'
+                        value={oldPassword}
+                        onChangeText={text => setoldPassword(text)}
+                        style={styles.input}
+                        secureTextEntry={true}
+                    />
+                    <TextInput
+                        placeholder='New Password'
+                        value={newPassword}
+                        onChangeText={text => setnewPassword(text)}
+                        style={styles.input}
+                        secureTextEntry={true}
+                    />
+                    <TextInput
+                        placeholder='Confirm New Password'
+                        value={confirmPassword}
+                        onChangeText={text => setConfirmPassword(text)}
+                        style={styles.input}
+                        secureTextEntry={true}
+                    />
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity
+                            style={styles.updateButton}
+                            onPress={changePassword}
+                        >
+                            <Text style={styles.updateText}>Update</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-
-            <View style={styles.buttonContainer}> 
+            <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleSignOut}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
+
         </View>
     )
 }
@@ -110,15 +112,19 @@ const ProfileScreen = () => {
 export default ProfileScreen
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     infoContainer: {
-        marginLeft: 10
+        marginLeft: 10,
+        alignItems: 'center'
     },
     inputContainer: {
         marginLeft: 10,
         width: '95%'
     },
     buttonContainer: {
-        marginTop: 280
+        flex: 0.1
     },
     updateButton: {
         backgroundColor: '#0782F9',
@@ -127,7 +133,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: "30%",
         alignItems: 'center'
-    }, 
+    },
     updateText: {
         color: 'white',
         fontWeight: '700',
@@ -146,9 +152,11 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     title: {
-        marginTop: 10,  
-        fontSize: 20,
-        textDecorationLine: 'underline'
+        marginTop: 10,
+        marginBottom: 10,
+        fontSize: 25,
+        fontWeight: '700'
+
     },
     input: {
         backgroundColor: 'white',
