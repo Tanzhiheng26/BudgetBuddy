@@ -56,9 +56,9 @@ const ProfileScreen = () => {
     }, [])
 
     return (
-        <View style={{ flex: 1, marginTop: 30 }}>
+        <View style={styles.container}>
             <View style={{ flex: 0.9 }}>
-                <View style={styles.infoContainer}>
+                <View style={{ alignItems: 'center' }}>
                     <Text style={styles.title}>User Info</Text>
                     <Text style={styles.text}>Username: {userInfo.username}</Text>
                     <Text style={styles.text}>Email: {userInfo.email}</Text>
@@ -97,14 +97,13 @@ const ProfileScreen = () => {
                     </View>
                 </View>
             </View>
-            <View style={styles.buttonContainer}>
+            <View style={{ flex: 0.1 }}>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleSignOut}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
     )
 }
@@ -113,22 +112,16 @@ export default ProfileScreen
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-    },
-    infoContainer: {
-        marginLeft: 10,
-        alignItems: 'center'
+        flex: 1, 
+        marginTop: 10
     },
     inputContainer: {
         marginLeft: 10,
         width: '95%'
     },
-    buttonContainer: {
-        flex: 0.1
-    },
     updateButton: {
         backgroundColor: '#0782F9',
-        marginTop: 10,
+        marginTop: 20,
         padding: 10,
         borderRadius: 10,
         width: "30%",
@@ -156,7 +149,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 25,
         fontWeight: '700'
-
     },
     input: {
         backgroundColor: 'white',
